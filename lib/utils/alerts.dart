@@ -66,4 +66,25 @@ class Alerts{
     //   },
     // );
   }
+
+  static showAlertDialog( String title, String message) {
+    Get.defaultDialog(
+      title: title,
+      // barrierDismissible: false,
+      middleText:
+      message,
+      titleStyle: const TextStyle(color: Colors.black),
+      middleTextStyle: const TextStyle(color: Colors.black),
+      // confirm: TextButton(
+      //   // style: flatButtonStyle,
+      //   onPressed: () {
+      //     Get.back();
+      //   },
+      //   child: const Text(
+      //     "Okay",
+      //     style: TextStyle(color: Colors.red),
+      //   ),
+      // ),
+    );
+  }
 }

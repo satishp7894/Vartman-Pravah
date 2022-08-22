@@ -301,43 +301,114 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      newsList[index].image! == null ?
-                      Expanded(
+                      newsList[index].videoUrl == null || newsList[index].videoUrl == ""
+                          ?
+                      newsList[index].image! == null
+                          ? Expanded(
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(5.0),
                                   topRight: Radius.circular(5.0)),
                               image: DecorationImage(
-                                  image:
-                                  // NetworkImage(imagePath!+newsDetailList[index].image!),
-                                  AssetImage("assets/img/placeholder.jpg"),
+                                  image: AssetImage(
+                                      "assets/img/placeholder.jpg"),
 
-                                  // articles[index].img! == null
-                                  //     ? AssetImage("aseets/img/placeholder.jpg")
-                                  //     : NetworkImage(articles[index].img!),
-
-
-
-                                  fit: BoxFit.fill)),
-                        ),
-                      ):Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.0),
-                                  topRight: Radius.circular(5.0)),
-                              image: DecorationImage(
-                                  image: NetworkImage(imagePath!+newsList[index].image!),
                                   //AssetImage("assets/img/placeholder.jpg"),
 
                                   // articles[index].img! == null
                                   //     ? AssetImage("aseets/img/placeholder.jpg")
                                   //     : NetworkImage(articles[index].img!),
 
+                                  fit: BoxFit.fill)),
+                        ),
+                      )
+                          : Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.0),
+                                  topRight: Radius.circular(5.0)),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      "${imagePath! + newsList[index].image!}"),
 
+                                  //AssetImage("assets/img/placeholder.jpg"),
+
+                                  // articles[index].img! == null
+                                  //     ? AssetImage("aseets/img/placeholder.jpg")
+                                  //     : NetworkImage(articles[index].img!),
 
                                   fit: BoxFit.fill)),
+                        ),
+                      )
+                          :newsList[index].image! == null
+                          ?
+                      Expanded(
+                        child: Stack(
+
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0)),
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/img/placeholder.jpg"),
+
+                                      //AssetImage("assets/img/placeholder.jpg"),
+
+                                      // articles[index].img! == null
+                                      //     ? AssetImage("aseets/img/placeholder.jpg")
+                                      //     : NetworkImage(articles[index].img!),
+
+                                      fit: BoxFit.fill)),
+                            ),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 5.0),
+                                child: Container(
+
+                                  child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                              )
+                              ,alignment: Alignment.center,)
+
+                          ],
+                        ),
+                      )
+                          : Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              // height: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0)),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          "${imagePath! + newsList[index].image!}"),
+
+                                      //AssetImage("assets/img/placeholder.jpg"),
+
+                                      // articles[index].img! == null
+                                      //     ? AssetImage("aseets/img/placeholder.jpg")
+                                      //     : NetworkImage(articles[index].img!),
+
+                                      fit: BoxFit.fill)),
+                            ),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 5.0),
+                                child: Container(
+
+                                  child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                              )
+                              ,alignment: Alignment.center,)
+
+                            // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                          ],
                         ),
                       ),
                       Container(

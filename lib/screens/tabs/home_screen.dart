@@ -9,6 +9,7 @@ import 'package:news/screens/category_details/category_details_controller.dart';
 import 'package:news/screens/landing_home/home_controller.dart';
 import 'package:news/screens/news_details/news_details_screen.dart';
 import 'package:news/style/theme.dart' as Style;
+import 'package:news/utils/alerts.dart';
 import 'package:news/utils/check_internet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -55,15 +56,57 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Material(
               elevation: 10,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 70,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 3),
-                  child: Image.asset(
-                    'assets/logos/app_logo.png',
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 70,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 3),
+                        child: Image.asset(
+                          'assets/logos/app_logo.png',
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  // Text("kwqdj"),
+                  PopupMenuButton(
+                      child: Container(
+                        height: 26,
+                        width: 40,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 17.41),
+                        child: Icon(Icons.more_vert_outlined,color: Colors.grey,size: 35,),
+                        // child: Image.asset(
+                        //  "assets/img/menu.png",
+                        //   color: Colors.red,
+                        //   width: 23,
+                        //   fit: BoxFit.contain,
+                        // ),
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child:  Text("About Us"),
+                          value: 1,
+
+                        ),
+                        PopupMenuItem(
+                          child: const Text("Contact Us"),
+                          value: 2,
+                        ),
+                      ]
+
+                  ,
+
+                    onSelected: (result) {
+                      if (result == 1) {
+                        Alerts.showAlertDialog( "About Us", "વર્તમાન પ્રવાહ ગુજરાતી સમાચાર માટે શ્રેષ્ઠ વેબસાઈટ છે. નિયમિત અપડેટ્સ માટે અમને અનુસરો!");
+                      }else  if (result == 2) {
+                        Alerts.showAlertDialog( "Contact Us", "સરનામું: દમણ કાર્યાલય : કલેકટર ઓફિસ નજીક, વીઆયપી સર્કિટ હાઉસ ની સામે, ઢોલર, મોટી દમણ \n નામ: શ્રી મુકેશ ગોસાવીસ \n સંપર્ક: 9979619477");
+                      }
+                    },)
+                ],
               ),
             ),
             Expanded(
@@ -100,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       }),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 5.0),
                         child: Row(
                           children: const <Widget>[
                             Text(
@@ -134,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       }),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 5.0),
                         child: Row(
                           children: <Widget>[
                             Text(
@@ -235,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Container(
               padding: EdgeInsets.only(
-                  left: 5.0, right: 5.0, top: 10.0, bottom: 10.0),
+                  left: 5.0, right: 5.0, top: 10.0, bottom: 5.0),
               child: Stack(
                 children: <Widget>[
                   sliderObj.image! == null
@@ -349,14 +392,15 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else
       return Container(
-        height: 90.0,
+        height: 78.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categoryList.length,
           itemBuilder: (context, index) {
             return Container(
-              padding: EdgeInsets.only(top: 10.0, right: 0.0),
-              width: 80.0,
+              // color: Colors.red,
+              padding: EdgeInsets.only(top: 5.0, right: 0.0),
+              width: 60.0,
               child: GestureDetector(
                 onTap: () async {
                   final sharedPreferences =
@@ -450,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )),
                           ),
                     SizedBox(
-                      height: 10.0,
+                      height: 5.0,
                     ),
                     Text(
                       categoryList[index].categoryName!,
@@ -640,7 +684,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             // height: articles.length / 2 * 210.0,
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.all(0.0),
             child: new GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemCount: newsList.length,
@@ -648,6 +692,8 @@ class _HomeScreenState extends State<HomeScreen> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 0.85),
               itemBuilder: (context, index) {
+
+                print("newsList[index].videoUrl ${newsList[index].videoUrl}");
                 return Padding(
                   padding: const EdgeInsets.only(
                       left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
@@ -698,6 +744,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
+                           newsList[index].videoUrl == null || newsList[index].videoUrl == ""
+                          ?
                           newsList[index].image! == null
                               ? Expanded(
                                   child: Container(
@@ -736,7 +784,76 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                             fit: BoxFit.fill)),
                                   ),
+                                )
+                          :newsList[index].image! == null
+                              ?
+                          Expanded(
+                            child: Stack(
+
+                                  children: [
+                                    Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(5.0),
+                                                  topRight: Radius.circular(5.0)),
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/img/placeholder.jpg"),
+
+                                                  //AssetImage("assets/img/placeholder.jpg"),
+
+                                                  // articles[index].img! == null
+                                                  //     ? AssetImage("aseets/img/placeholder.jpg")
+                                                  //     : NetworkImage(articles[index].img!),
+
+                                                  fit: BoxFit.fill)),
+                                    ),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 5.0),
+                                        child: Container(
+
+                                          child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                      )
+                                      ,alignment: Alignment.center,)
+
+                                  ],
                                 ),
+                          )
+                              : Expanded(
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      // height: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(5.0),
+                                                  topRight: Radius.circular(5.0)),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      "${imagePath! + newsList[index].image!}"),
+
+                                                  //AssetImage("assets/img/placeholder.jpg"),
+
+                                                  // articles[index].img! == null
+                                                  //     ? AssetImage("aseets/img/placeholder.jpg")
+                                                  //     : NetworkImage(articles[index].img!),
+
+                                                  fit: BoxFit.fill)),
+                                    ),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 5.0),
+                                        child: Container(
+
+                                            child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                      )
+                                      ,alignment: Alignment.center,)
+
+                                    // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                                  ],
+                                ),
+                              ),
                           Container(
                             padding: EdgeInsets.only(
                                 left: 10.0,

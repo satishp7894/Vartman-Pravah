@@ -33,17 +33,10 @@ class NewsDetailsController extends GetxController {
 
   NewsDetailsController({required this.apiRepositoryInterface, required this.newsId});
 
-  @override
-  void onInit() {
-    // print("onInit $newsId");
-   // getNewsDetail(newsId);
 
-    _createBannerAd();
-
-    super.onInit();
-  }
-  void _createBannerAd() {
+  void createBannerAd() {
     print("_createBannerAd --------------------------------");
+    // bannerAd!.dispose();
     bannerAd = BannerAd(
       // TODO: replace these test ad units with your own ad unit.
       adUnitId: Platform.isAndroid
@@ -73,7 +66,7 @@ class NewsDetailsController extends GetxController {
           bannerAd = null;
           isBannerAdReady(false);
           if (numBannerLoadAttempts < maxFailedLoadAttempts) {
-            _createBannerAd();
+            createBannerAd();
           }
           // ad.dispose();
         },

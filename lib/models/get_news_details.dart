@@ -39,6 +39,7 @@ class NewsDetails {
   String? newsDate;
   String? categoryId;
   String? image;
+  String? videoUrl;
   String? isActive;
   String? createdBy;
   String? modifiedBy;
@@ -55,6 +56,7 @@ class NewsDetails {
         this.newsDate,
         this.categoryId,
         this.image,
+        this.videoUrl,
         this.isActive,
         this.createdBy,
         this.modifiedBy,
@@ -71,6 +73,7 @@ class NewsDetails {
     newsDate = json['news_date'];
     categoryId = json['category_id'];
     image = json['image'];
+    videoUrl = json['video_url'];
     isActive = json['is_active'];
     createdBy = json['created_by'];
     modifiedBy = json['modified_by'];
@@ -89,6 +92,7 @@ class NewsDetails {
     data['news_date'] = this.newsDate;
     data['category_id'] = this.categoryId;
     data['image'] = this.image;
+    data['video_url'] = this.videoUrl;
     data['is_active'] = this.isActive;
     data['created_by'] = this.createdBy;
     data['modified_by'] = this.modifiedBy;

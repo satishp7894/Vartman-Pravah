@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     animationController = AnimationController(
-        vsync: this, duration:  const Duration(seconds: 5));
+        vsync: this, duration:  const Duration(seconds: 3));
     animation = CurvedAnimation(parent: animationController!,curve: Curves.easeOut);
     animation!.addListener( (){
       setState(() {
@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   void initializeApp() async {
     await Future.delayed(
-      const Duration(seconds: 5),
+      const Duration(seconds: 3),
     );
 
     Get.offNamed(Routes.landingHome);

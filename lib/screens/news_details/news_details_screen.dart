@@ -1,8 +1,13 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+// import 'package:flutter_youtube_view/flutter_youtube_view.dart';
 
 // import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:news/constants/app_costants.dart';
 import 'package:news/models/get_all_category.dart';
@@ -21,26 +26,31 @@ import 'package:news/screens/category_details/category_details_controller.dart';
 import 'package:news/screens/news_details/news_details_controller.dart';
 import 'package:news/style/theme.dart' as Style;
 import 'package:news/utils/check_internet.dart';
+import 'package:news/widget/youtube_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'dart:io' show Platform;
 
 class NewsDetailScreen extends StatefulWidget {
   final bool? isBool;
   final bool? isPageCheck;
   final Newsdata? newsData;
+
   // final List<Nextdata>? nextData;
   final String? imagePath;
 
-  const NewsDetailScreen({Key? key, required this.isBool, required this.newsData, required this.imagePath,required this.isPageCheck}) : super(key: key);
+  const NewsDetailScreen(
+      {Key? key,
+      required this.isBool,
+      required this.newsData,
+      required this.imagePath,
+      required this.isPageCheck})
+      : super(key: key);
 
   @override
   _NewsDetailScreenState createState() => _NewsDetailScreenState();
 }
 
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
-
   CategoryDetailsController? categoryDetailsController;
   NewsDetailsController? newsDetailsController;
   static final AdRequest request = AdRequest(
@@ -68,27 +78,33 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     // _createRewardedAd();
     // _createBannerAd();
     // showAds();
+
     CheckInternet.checkInternet();
-     newsdata = widget.newsData;
+    newsdata = widget.newsData;
     // List<Nextdata>? nextList = widget.nextData;
-   imagePath = widget.imagePath;
+    imagePath = widget.imagePath;
     categoryDetailsController = Get.find<CategoryDetailsController>();
-     newsDetailsController = Get.put(NewsDetailsController(
+    newsDetailsController = Get.put(NewsDetailsController(
         apiRepositoryInterface: Get.find(), newsId: newsdata!.newsId!));
+    newsDetailsController!.createBannerAd();
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    categoryDetailsController!.onClose();
+    newsDetailsController!.onClose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     //if(widget.isBool != true){
 
-        initNextData(categoryDetailsController!,newsdata!,widget.isPageCheck);
-   // }
-
+    initNextData(categoryDetailsController!, newsdata!, widget.isPageCheck);
+    // }
 
     // final Newsdata args =
     //     ModalRoute.of(context)!.settings.arguments as Newsdata;
@@ -103,176 +119,181 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     // List<Nextdata>? nextList = argumentData[2]['nextData'] != null ?argumentData[2]['nextData'] :[];
     // String? imagePath = argumentData[3]['imagePath'];
 
-
-
-
-
-
     // final newsDetailsController = Get.find<NewsDetailsController>();
     print("args.newsId! ${newsdata!.newsId!}");
     print("args.categoryId! ${newsdata!.categoryId!}");
 
     // newsDetailsController.getNewsDetail(newsdata.newsId!);
     // newsDetailsController.newsId(args.newsId!);
-    initData(newsDetailsController!,newsdata!);
-
+    initData(newsDetailsController!, newsdata!);
 
     return WillPopScope(
       onWillPop: () async {
         debugPrint("Will pop");
         final sharedPreferences = await SharedPreferences.getInstance();
 
-        print("AppConstants.categoryId ${sharedPreferences.getString(AppConstants.categoryId!)}");
-        print("AppConstants.categoryName ${sharedPreferences.getString(AppConstants.categoryName!)}");
+        print(
+            "AppConstants.categoryId ${sharedPreferences.getString(AppConstants.categoryId!)}");
+        print(
+            "AppConstants.categoryName ${sharedPreferences.getString(AppConstants.categoryName!)}");
         Get.back();
         //
         // Get.toNamed(Routes.categoryDetails,arguments: [
         //   {"categoryId": sharedPreferences.getString(AppConstants.categoryId!)},
         //   {"categoryName": sharedPreferences.getString(AppConstants.categoryName!)},
         // ]);
-        if(widget.isBool!){
+        if (widget.isBool!) {
           Get.toNamed(Routes.landingHome);
-        }else{
+        } else {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => CategoryDetails(
-                categoryId: sharedPreferences.getString(AppConstants.categoryId!), categoryName: sharedPreferences.getString(AppConstants.categoryName!),
+                categoryId:
+                    sharedPreferences.getString(AppConstants.categoryId!),
+                categoryName:
+                    sharedPreferences.getString(AppConstants.categoryName!),
               ),
             ),
           );
         }
 
-
         return true;
       },
       child: Obx(() {
-        GetNewsDetails? getNewsDetails = newsDetailsController!.getNewsDetailsObj.value;
-        List<NewsDetails>? newsDetailList = getNewsDetails.newsDetails != null ? getNewsDetails.newsDetails : [] ;
+        GetNewsDetails? getNewsDetails =
+            newsDetailsController!.getNewsDetailsObj.value;
+        List<NewsDetails>? newsDetailList = getNewsDetails.newsDetails != null
+            ? getNewsDetails.newsDetails
+            : [];
         if (newsDetailsController!.isLoadingGetNewDetail.value != true) {
           // return Text("tetete");
-
 
           // var document = parse(
           //     newsDetailList[0].description!);
           // print("document ${document.outerHtml}");
           return Scaffold(
-            // bottomNavigationBar: GestureDetector(
-            //       onTap: () {
-            //        // launch(article.url);
-            //       },
-            //                 child: Container(
-            //                   height: 48.0,
-            //                   width: MediaQuery.of(context).size.width,
-            //                   decoration: BoxDecoration(
-            //                     color: Colors.white,
-            //                     gradient: Style.Colors.primaryGradient
-            //                   ),
-            //                   child: Column(
-            //                     mainAxisAlignment: MainAxisAlignment.center,
-            //                     crossAxisAlignment: CrossAxisAlignment.center,
-            //                     children: <Widget>[
-            //                       Text("Read More", style: TextStyle(
-            //                         color: Colors.white,
-            //                         fontFamily: "SFPro-Bold",
-            //                         fontSize: 15.0
-            //                       ),),
-            //                     ],
-            //                   ),
-            //                 ),
-            //     ),
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              leading: InkWell(
-                  onTap: () async {
-                    // initNextData(categoryDetailsController!,newsdata);
-                    //  initData(newsDetailsController,newsdata);
-                    final sharedPreferences = await SharedPreferences.getInstance();
+              // bottomNavigationBar: GestureDetector(
+              //       onTap: () {
+              //        // launch(article.url);
+              //       },
+              //                 child: Container(
+              //                   height: 48.0,
+              //                   width: MediaQuery.of(context).size.width,
+              //                   decoration: BoxDecoration(
+              //                     color: Colors.white,
+              //                     gradient: Style.Colors.primaryGradient
+              //                   ),
+              //                   child: Column(
+              //                     mainAxisAlignment: MainAxisAlignment.center,
+              //                     crossAxisAlignment: CrossAxisAlignment.center,
+              //                     children: <Widget>[
+              //                       Text("Read More", style: TextStyle(
+              //                         color: Colors.white,
+              //                         fontFamily: "SFPro-Bold",
+              //                         fontSize: 15.0
+              //                       ),),
+              //                     ],
+              //                   ),
+              //                 ),
+              //     ),
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                leading: InkWell(
+                    onTap: () async {
+                      // initNextData(categoryDetailsController!,newsdata);
+                      //  initData(newsDetailsController,newsdata);
+                      final sharedPreferences =
+                          await SharedPreferences.getInstance();
 
-                    print("AppConstants.categoryId ${sharedPreferences.getString(AppConstants.categoryId!)}");
-                    print("AppConstants.categoryName ${sharedPreferences.getString(AppConstants.categoryName!)}");
-                    Get.back();
-                    //
-                    // Get.toNamed(Routes.categoryDetails,arguments: [
-                    //   {"categoryId": sharedPreferences.getString(AppConstants.categoryId!)},
-                    //   {"categoryName": sharedPreferences.getString(AppConstants.categoryName!)},
-                    // ]);
+                      print(
+                          "AppConstants.categoryId ${sharedPreferences.getString(AppConstants.categoryId!)}");
+                      print(
+                          "AppConstants.categoryName ${sharedPreferences.getString(AppConstants.categoryName!)}");
+                      Get.back();
+                      //
+                      // Get.toNamed(Routes.categoryDetails,arguments: [
+                      //   {"categoryId": sharedPreferences.getString(AppConstants.categoryId!)},
+                      //   {"categoryName": sharedPreferences.getString(AppConstants.categoryName!)},
+                      // ]);
 
-                    if(widget.isBool!){
-                      Get.toNamed(Routes.landingHome);
-                    }else{
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CategoryDetails(
-                            categoryId: sharedPreferences.getString(AppConstants.categoryId!), categoryName: sharedPreferences.getString(AppConstants.categoryName!),
+                      if (widget.isBool!) {
+                        Get.toNamed(Routes.landingHome);
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategoryDetails(
+                              categoryId: sharedPreferences
+                                  .getString(AppConstants.categoryId!),
+                              categoryName: sharedPreferences
+                                  .getString(AppConstants.categoryName!),
+                            ),
                           ),
-                        ),
-                      );
-                    }
-
-
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.red,
-                  )),
-              title:  Text(
-                newsdata!.newsTitle!,
-                style: const TextStyle(color: Colors.red),
+                        );
+                      }
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.red,
+                    )),
+                title: Text(
+                  newsdata!.newsTitle!,
+                  style: const TextStyle(color: Colors.red),
+                ),
               ),
-            ),
-            bottomNavigationBar: Obx(() {
-              if (newsDetailsController!.isBannerAdReady.value == true) {
-                return  Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    // color: Colors.green,
-                    width: MediaQuery.of(context).size.width,
-                    height: newsDetailsController!.bannerAd!.size.height.toDouble(),
-                    child: AdWidget(ad: newsDetailsController!.bannerAd!),
-
-                  ),
-                );
-              } else {
-                return  Container(
-                  height: 0,
-                  // child: CircularProgressIndicator(color: Colors.red),
-                );
-              }
-            }),
-            body: RefreshIndicator(
-              color: Style.Colors.appColor,
-              onRefresh: () {
-                int? categoryId;
-                if(widget.isPageCheck! == true){
-                  categoryId = int.parse(newsdata!.categoryId!)-1;
-                  print("categoryId if ${categoryId}");
-
-                }else{
-                  categoryId = int.parse(newsdata!.categoryId!);
-                  print("categoryId else ${categoryId}");
+              bottomNavigationBar: Obx(() {
+                if (newsDetailsController!.isBannerAdReady.value == true) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      // color: Colors.green,
+                      width: MediaQuery.of(context).size.width,
+                      height: newsDetailsController!.bannerAd!.size.height
+                          .toDouble(),
+                      child: AdWidget(ad: newsDetailsController!.bannerAd!),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    height: 0,
+                    // child: CircularProgressIndicator(color: Colors.red),
+                  );
                 }
+              }),
+              body: RefreshIndicator(
+                color: Style.Colors.appColor,
+                onRefresh: () {
+                  int? categoryId;
+                  if (widget.isPageCheck! == true) {
+                    categoryId = int.parse(newsdata!.categoryId!) - 1;
+                    print("categoryId if ${categoryId}");
+                  } else {
+                    categoryId = int.parse(newsdata!.categoryId!);
+                    print("categoryId else ${categoryId}");
+                  }
 
-                // print("categoryId ${categoryId}");
-                CheckInternet.checkInternet();
-                categoryDetailsController!.getNewsByCategory(categoryId.toString(),"",false);
-                return  newsDetailsController!.getNewsDetail(newsdata!.newsId!,true);
-              },
-            child: _buildNewsDetailWidget(
-                newsDetailsController!.getNewsDetailsObj.value,imagePath,widget.isBool,widget.isPageCheck,newsDetailsController!,categoryDetailsController: categoryDetailsController),)
+                  // print("categoryId ${categoryId}");
+                  CheckInternet.checkInternet();
 
-
-
-          );
+                  categoryDetailsController!
+                      .getNewsByCategory(categoryId.toString(), "", false);
+                  return newsDetailsController!
+                      .getNewsDetail(newsdata!.newsId!, true);
+                },
+                child: _buildNewsDetailWidget(
+                    newsDetailsController!.getNewsDetailsObj.value,
+                    imagePath,
+                    widget.isBool,
+                    widget.isPageCheck,
+                    newsDetailsController!,
+                    categoryDetailsController: categoryDetailsController),
+              ));
         } else {
-
-
-
           // return const Center(
           //   child: CircularProgressIndicator(),
           // );
-          if (newsDetailsController!.isRefreshGetNewDetail.value != true){
+          if (newsDetailsController!.isRefreshGetNewDetail.value != true) {
             return Scaffold(
               // bottomNavigationBar: GestureDetector(
               //       onTap: () {
@@ -303,7 +324,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 leading: InkWell(
                     onTap: () {
                       Get.back();
-
                     },
                     child: Icon(
                       Icons.arrow_back,
@@ -314,11 +334,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   style: TextStyle(color: Colors.red),
                 ),
               ),
-              body:const Center(
+              body: const Center(
                 child: CircularProgressIndicator(color: Colors.red),
               ),
             );
-          }else{
+          } else {
             return Scaffold(
               // bottomNavigationBar: GestureDetector(
               //       onTap: () {
@@ -349,7 +369,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 leading: InkWell(
                     onTap: () {
                       Get.back();
-
                     },
                     child: Icon(
                       Icons.arrow_back,
@@ -365,7 +384,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               ),
             );
           }
-
         }
       }),
     );
@@ -452,6 +470,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           },
         ));
   }
+
   void _showInterstitialAd() {
     if (_interstitialAd == null) {
       print('Warning: attempt to show interstitial before loaded.');
@@ -499,6 +518,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           },
         ));
   }
+
   void _showRewardedAd() {
     if (_rewardedAd == null) {
       print('Warning: attempt to show rewarded before loaded.');
@@ -522,17 +542,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     _rewardedAd!.setImmersiveMode(true);
     _rewardedAd!.show(
         onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-          print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-        });
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+    });
     _rewardedAd = null;
   }
 
-
-
-
-  _buildNewsDetailWidget(GetNewsDetails getNewsDetails, String? imagePath, bool? isBool, bool? isPageCheck, NewsDetailsController newsDetailsController,
+  _buildNewsDetailWidget(
+      GetNewsDetails getNewsDetails,
+      String? imagePath,
+      bool? isBool,
+      bool? isPageCheck,
+      NewsDetailsController newsDetailsController,
       {CategoryDetailsController? categoryDetailsController}) {
-    List<NewsDetails>? newsDetailList = getNewsDetails.newsDetails != null ? getNewsDetails.newsDetails : [];
+    List<NewsDetails>? newsDetailList =
+        getNewsDetails.newsDetails != null ? getNewsDetails.newsDetails : [];
     String? imagePath = getNewsDetails.imgPath;
     String? message = getNewsDetails.message ?? AppConstants.noInternetConn;
     if (newsDetailList!.length == 0) {
@@ -543,10 +566,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           // physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
-
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height-200,
+              height: MediaQuery.of(context).size.height - 200,
               //height: MediaQuery.of(context).size.height,
               alignment: Alignment.center,
               child: Center(
@@ -556,87 +578,112 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ),
               ),
             ),
-
           ],
         ),
       );
     } else {
-
-      final String newsDate = DateFormat("dd-MMM-yyyy").format(DateTime.parse(newsDetailList[0].newsDate!));
+      final String newsDate = DateFormat("dd-MMM-yyyy")
+          .format(DateTime.parse(newsDetailList[0].newsDate!));
       // final String newsDate = DateFormat("dd-MMM-yyyy").format(DateTime.parse("2019-09-09"));
       print("newsDate $newsDate");
+      print("newsDetailList[0].videoUrl ${newsDetailList[0].videoUrl}");
       return ListView(
         children: <Widget>[
-          newsDetailList[0].image! == null ?
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Container(
-                padding: EdgeInsets.only(right: 10.0),
-                width: MediaQuery.of(context).size.width * 2 / 5,
-                height: 130,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image:
-                      // NetworkImage(imagePath! + newsDetailList[0].image!)
-                    AssetImage("assets/img/placeholder.jpg")
+          newsDetailList[0].videoUrl == null || newsDetailList[0].videoUrl == ""
+              ? newsDetailList[0].image! == null
+                  ? AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Container(
+                          padding: EdgeInsets.only(right: 10.0),
+                          width: MediaQuery.of(context).size.width * 2 / 5,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                            shape: BoxShape.rectangle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image:
+                                    // NetworkImage(imagePath! + newsDetailList[0].image!)
+                                    AssetImage("assets/img/placeholder.jpg")
 
-                    //       image: article.img == null
-                    //   ? AssetImage("assets/img/placeholder.jpg")
-                    // : NetworkImage(article.img)
-                  ),
-                )),
-            //             FadeInImage.assetNetwork(
-            //   alignment: Alignment.topCenter,
-            //   placeholder: 'images/placeholder.png',
-            //   image:
-            //   // article.img == null
-            //   // ?
-            //   "http://to-let.com.bd/operator/images/noimage.png"
-            //   // :
-            //   // article.img
-            //   ,
-            //   fit: BoxFit.cover,
-            //   width: double.maxFinite,
-            //   height:  MediaQuery.of(context).size.height*1/3
-            // ),
-          ):
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Container(
-                padding: EdgeInsets.only(right: 10.0),
-                width: MediaQuery.of(context).size.width * 2 / 5,
-                height: 130,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(imagePath! + newsDetailList[0].image!)
-                      //AssetImage("assets/img/placeholder.jpg")
+                                //       image: article.img == null
+                                //   ? AssetImage("assets/img/placeholder.jpg")
+                                // : NetworkImage(article.img)
+                                ),
+                          )),
+                      //             FadeInImage.assetNetwork(
+                      //   alignment: Alignment.topCenter,
+                      //   placeholder: 'images/placeholder.png',
+                      //   image:
+                      //   // article.img == null
+                      //   // ?
+                      //   "http://to-let.com.bd/operator/images/noimage.png"
+                      //   // :
+                      //   // article.img
+                      //   ,
+                      //   fit: BoxFit.cover,
+                      //   width: double.maxFinite,
+                      //   height:  MediaQuery.of(context).size.height*1/3
+                      // ),
+                    )
+                  : AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Container(
+                          padding: EdgeInsets.only(right: 10.0),
+                          width: MediaQuery.of(context).size.width * 2 / 5,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                            shape: BoxShape.rectangle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                    imagePath! + newsDetailList[0].image!)
+                                //AssetImage("assets/img/placeholder.jpg")
 
-                      //       image: article.img == null
-                      //   ? AssetImage("assets/img/placeholder.jpg")
-                      // : NetworkImage(article.img)
-                      ),
-                )),
-            //             FadeInImage.assetNetwork(
-            //   alignment: Alignment.topCenter,
-            //   placeholder: 'images/placeholder.png',
-            //   image:
-            //   // article.img == null
-            //   // ?
-            //   "http://to-let.com.bd/operator/images/noimage.png"
-            //   // :
-            //   // article.img
-            //   ,
-            //   fit: BoxFit.cover,
-            //   width: double.maxFinite,
-            //   height:  MediaQuery.of(context).size.height*1/3
-            // ),
-          ),
+                                //       image: article.img == null
+                                //   ? AssetImage("assets/img/placeholder.jpg")
+                                // : NetworkImage(article.img)
+                                ),
+                          )),
+                      //             FadeInImage.assetNetwork(
+                      //   alignment: Alignment.topCenter,
+                      //   placeholder: 'images/placeholder.png',
+                      //   image:
+                      //   // article.img == null
+                      //   // ?
+                      //   "http://to-let.com.bd/operator/images/noimage.png"
+                      //   // :
+                      //   // article.img
+                      //   ,
+                      //   fit: BoxFit.cover,
+                      //   width: double.maxFinite,
+                      //   height:  MediaQuery.of(context).size.height*1/3
+                      // ),
+                    )
+              :
+
+          // Container(
+          //   height: 200,
+          //         child: FlutterYoutubeView(
+          //             // onViewCreated: _onYoutubeCreated,
+          //             // listener: this,
+          //             scaleMode: YoutubeScaleMode.none,
+          //             // <option> fitWidth, fitHeight
+          //             params: YoutubeParam(
+          //                 videoId: "CHaF2Gdqxd8",
+          //                 showUI: false,
+          //                 startSeconds: 0.0, // <option>
+          //                 autoPlay: false) // <option>
+          //             ))
+
+          Container(height: 220,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+            child: YoutubeView(youtubeUrl: '${newsDetailList[0].videoUrl}'),
+          )
+          ,
           Container(
             padding: EdgeInsets.all(10.0),
             child: Column(
@@ -685,41 +732,45 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   //     color: Colors.black87),
                 ),
                 // _buildCategoryWidget(categoryDetailsController.getCategoryDetailsObj.value)
-                isPageCheck == true ?
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0,left: 8.0,bottom: 3.0),
-                  child: Material(
-                    elevation: 10,
-                    child: Container(
-                      // color: Colors.grey.withOpacity(0.5),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 1.5,
-                            spreadRadius: 1.0,
-                            offset: Offset(
-                              1.0,
-                              1.0,
+                isPageCheck == true
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8.0, left: 8.0, bottom: 3.0),
+                        child: Material(
+                          elevation: 10,
+                          child: Container(
+                            // color: Colors.grey.withOpacity(0.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 1.5,
+                                  spreadRadius: 1.0,
+                                  offset: Offset(
+                                    1.0,
+                                    1.0,
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      // height: 70,
-                      child: Padding(
-                        padding: const EdgeInsets.all( 8.0),
-                        child: Text(
-                          newsDetailList[0].categoryName!,
-                          style: TextStyle(
-                              color: Style.Colors.mainColor, fontSize: 20.0),
+                            width: MediaQuery.of(context).size.width,
+                            // height: 70,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                newsDetailList[0].categoryName!,
+                                style: TextStyle(
+                                    color: Style.Colors.mainColor,
+                                    fontSize: 20.0),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ):Container(),
+                      )
+                    : Container(),
                 // Padding(
                 //   padding: const EdgeInsets.all(8.0),
                 //   child: _bannerWidget(newsDetailsController),
@@ -744,16 +795,17 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 // }),
 
                 Obx(() {
-                  if (categoryDetailsController?.isLoadingGetCategoryDetail.value != true) {
-                    return  _buildCategoryWidget(imagePath,categoryDetailsController!,isPageCheck);
+                  if (categoryDetailsController
+                          ?.isLoadingGetCategoryDetail.value !=
+                      true) {
+                    return _buildCategoryWidget(
+                        imagePath, categoryDetailsController!, isPageCheck);
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(color: Colors.red),
                     );
                   }
                 }),
-
-
               ],
             ),
           )
@@ -761,59 +813,65 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
       );
     }
   }
-  _buildCategoryWidget( String? imagePath, CategoryDetailsController categoryDetailsController, bool? isPageCheck) {
-    GetNewsByCategory? getNewsByCategory = categoryDetailsController.getCategoryDetailsObj.value ;
-    String? nextCategoryName = getNewsByCategory.nextCategoryName != null ? getNewsByCategory.nextCategoryName :"";
-    List<Nextdata>? nextDataList = getNewsByCategory.nextdata != null ? getNewsByCategory.nextdata :[];
+
+  _buildCategoryWidget(String? imagePath,
+      CategoryDetailsController categoryDetailsController, bool? isPageCheck) {
+    GetNewsByCategory? getNewsByCategory =
+        categoryDetailsController.getCategoryDetailsObj.value;
+    String? nextCategoryName = getNewsByCategory.nextCategoryName != null
+        ? getNewsByCategory.nextCategoryName
+        : "";
+    List<Nextdata>? nextDataList =
+        getNewsByCategory.nextdata != null ? getNewsByCategory.nextdata : [];
     // print("nextDataList ${nextDataList![0].newsTitle}");
 
-   //  String? imagePath = getNewsByCategory.imgPath;
-   //  String? message = getNewsByCategory.message != null ?getNewsByCategory.message :"No Data Found";
-    if(nextDataList!.isEmpty){
+    //  String? imagePath = getNewsByCategory.imgPath;
+    //  String? message = getNewsByCategory.message != null ?getNewsByCategory.message :"No Data Found";
+    if (nextDataList!.isEmpty) {
+      return Container();
+    } else {
       return Container(
-
-      );
-    }else{
-      return  Container(
         //  height: articles.length / 2 * 210.0,
-        padding: EdgeInsets.all( 5.0),
+        padding: EdgeInsets.all(5.0),
         child: Column(
           children: [
-            isPageCheck == true ? Container():
-            Padding(
-              padding: const EdgeInsets.only(left: 5.0,right: 5.0,bottom: 8.0),
-              child: Material(
-                elevation: 10,
-                child: Container(
-                 // color: Colors.grey.withOpacity(0.5),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 1.5,
-                        spreadRadius: 1.0,
-                        offset: Offset(
-                          1.0,
-                          1.0,
+            isPageCheck == true
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(
+                        left: 5.0, right: 5.0, bottom: 8.0),
+                    child: Material(
+                      elevation: 10,
+                      child: Container(
+                        // color: Colors.grey.withOpacity(0.5),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 1.5,
+                              spreadRadius: 1.0,
+                              offset: Offset(
+                                1.0,
+                                1.0,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  // height: 70,
-                  child: Padding(
-                    padding: const EdgeInsets.all( 8.0),
-                    child: Text(
-                      nextCategoryName!,
-                      style: TextStyle(
-                          color: Style.Colors.mainColor, fontSize: 20.0),
+                        width: MediaQuery.of(context).size.width,
+                        // height: 70,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            nextCategoryName!,
+                            style: TextStyle(
+                                color: Style.Colors.mainColor, fontSize: 20.0),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
             new GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -822,7 +880,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   crossAxisCount: 2, childAspectRatio: 0.85),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0,bottom: 5.0),
+                  padding: const EdgeInsets.only(
+                      left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
                   child: GestureDetector(
                     onTap: () {
                       print("nextDataList ${nextDataList[index].newsId}");
@@ -836,23 +895,31 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       //   {"imagePath": imagePath}
                       // ]
                       // );
-                     // Get.toNamed(Routes.newsDetails,arguments: newsDetailList[index]);
-                     //  categoryDetailsController.getNewsByCategory(nextDataList[index].categoryId!,"",false);
+                      // Get.toNamed(Routes.newsDetails,arguments: newsDetailList[index]);
+                      //  categoryDetailsController.getNewsByCategory(nextDataList[index].categoryId!,"",false);
+
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NewsDetailScreen(isBool: widget.isBool,newsData: Newsdata(
-                                newsId: nextDataList[index].newsId,
-                                newsTitle: nextDataList[index].newsTitle,
-                                shortDescription: nextDataList[index].shortDescription,
-                                newsDate: nextDataList[index].newsDate,
-                                image: nextDataList[index].image,
-                                categoryName: nextDataList[index].categoryName,
-                                categoryId: nextDataList[index].categoryId,
-                              ),imagePath: imagePath, isPageCheck: false,
+                              builder: (context) => NewsDetailScreen(
+                                    isBool: widget.isBool,
+                                    newsData: Newsdata(
+                                      newsId: nextDataList[index].newsId,
+                                      newsTitle: nextDataList[index].newsTitle,
+                                      shortDescription:
+                                          nextDataList[index].shortDescription,
+                                      newsDate: nextDataList[index].newsDate,
+                                      image: nextDataList[index].image,
+                                      categoryName:
+                                          nextDataList[index].categoryName,
+                                      categoryId:
+                                          nextDataList[index].categoryId,
+                                    ),
+                                    imagePath: imagePath,
+                                    isPageCheck: false,
 
-                                // article: articles[index],
-                              )));
+                                    // article: articles[index],
+                                  )));
                     },
                     child: Container(
                       width: 220.0,
@@ -873,49 +940,122 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
-                          nextDataList[index].image! == null ?
-                          Expanded(
+                          nextDataList[index].videoUrl == null || nextDataList[index].videoUrl == ""
+                              ?
+                          nextDataList[index].image! == null
+                              ? Expanded(
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5.0),
                                       topRight: Radius.circular(5.0)),
                                   image: DecorationImage(
-                                      image:
-                                      // NetworkImage(imagePath!+newsDetailList[index].image!),
-                                      AssetImage("assets/img/placeholder.jpg"),
+                                      image: AssetImage(
+                                          "assets/img/placeholder.jpg"),
 
-                                      // articles[index].img! == null
-                                      //     ? AssetImage("aseets/img/placeholder.jpg")
-                                      //     : NetworkImage(articles[index].img!),
-
-
-
-                                      fit: BoxFit.cover)),
-                            ),
-                          )
-                              :Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5.0),
-                                      topRight: Radius.circular(5.0)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(imagePath!+nextDataList[index].image!),
                                       //AssetImage("assets/img/placeholder.jpg"),
 
                                       // articles[index].img! == null
                                       //     ? AssetImage("aseets/img/placeholder.jpg")
                                       //     : NetworkImage(articles[index].img!),
 
+                                      fit: BoxFit.fill)),
+                            ),
+                          )
+                              : Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0)),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          "${imagePath! + nextDataList[index].image!}"),
 
+                                      //AssetImage("assets/img/placeholder.jpg"),
 
-                                      fit: BoxFit.cover)),
+                                      // articles[index].img! == null
+                                      //     ? AssetImage("aseets/img/placeholder.jpg")
+                                      //     : NetworkImage(articles[index].img!),
+
+                                      fit: BoxFit.fill)),
+                            ),
+                          )
+                              :nextDataList[index].image! == null
+                              ?
+                          Expanded(
+                            child: Stack(
+
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          topRight: Radius.circular(5.0)),
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              "assets/img/placeholder.jpg"),
+
+                                          //AssetImage("assets/img/placeholder.jpg"),
+
+                                          // articles[index].img! == null
+                                          //     ? AssetImage("aseets/img/placeholder.jpg")
+                                          //     : NetworkImage(articles[index].img!),
+
+                                          fit: BoxFit.fill)),
+                                ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: Container(
+
+                                      child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                  )
+                                  ,alignment: Alignment.center,)
+
+                              ],
+                            ),
+                          )
+                              : Expanded(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  // height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          topRight: Radius.circular(5.0)),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              "${imagePath! + nextDataList[index].image!}"),
+
+                                          //AssetImage("assets/img/placeholder.jpg"),
+
+                                          // articles[index].img! == null
+                                          //     ? AssetImage("aseets/img/placeholder.jpg")
+                                          //     : NetworkImage(articles[index].img!),
+
+                                          fit: BoxFit.fill)),
+                                ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: Container(
+
+                                      child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                  )
+                                  ,alignment: Alignment.center,)
+
+                                // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                              ],
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.only(
-                                left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                                left: 10.0,
+                                right: 10.0,
+                                top: 10.0,
+                                bottom: 10.0),
                             child: Text(
                               nextDataList[index].newsTitle!,
                               textAlign: TextAlign.center,
@@ -927,7 +1067,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                             alignment: Alignment.center,
                             children: <Widget>[
                               Container(
-                                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                                padding:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
                                 width: 180,
                                 height: 1.0,
                                 color: Colors.black12,
@@ -944,13 +1085,18 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  nextDataList[index].categoryName!,
-                                  style: TextStyle(
-                                      color: Style.Colors.mainColor, fontSize: 12.0),
+                                Expanded(
+                                  child: Text(
+                                    nextDataList[index].categoryName!,
+                                    style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Style.Colors.mainColor,
+                                        fontSize: 12.0),
+                                  ),
                                 ),
                                 Text(
-                                  timeUntil(DateTime.parse(nextDataList[index].newsDate!)),
+                                  timeUntil(DateTime.parse(
+                                      nextDataList[index].newsDate!)),
                                   // "timeUntil",
                                   style: TextStyle(
                                       color: Colors.black54, fontSize: 12.0),
@@ -969,46 +1115,47 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         ),
       );
     }
-
   }
 
-   initNextData(CategoryDetailsController categoryDetailsController, Newsdata newsdata, bool? isPageCheck) async {
-     int? categoryId ;
-     if(isPageCheck == true){
-       categoryId = int.parse(newsdata.categoryId!)-1;
-       print("categoryId if ${categoryId}");
-     }else{
-       categoryId = int.parse(newsdata.categoryId!);
-       print("categoryId else ${categoryId}");
-     }
+  initNextData(CategoryDetailsController categoryDetailsController,
+      Newsdata newsdata, bool? isPageCheck) async {
+    int? categoryId;
+    if (isPageCheck == true) {
+      categoryId = int.parse(newsdata.categoryId!) - 1;
+      print("categoryId if ${categoryId}");
+    } else {
+      categoryId = int.parse(newsdata.categoryId!);
+      print("categoryId else ${categoryId}");
+    }
 
-     await  Future.delayed(const Duration(seconds: 0), () {
-       categoryDetailsController.getNewsByCategory(categoryId!.toString(),"",false);
-       } );
-
+    await Future.delayed(const Duration(seconds: 0), () {
+      categoryDetailsController.getNewsByCategory(
+          categoryId!.toString(), "", false);
+    });
   }
 
-  Future<void> initData(NewsDetailsController newsDetailsController, Newsdata newsdata) async {
+  Future<void> initData(
+      NewsDetailsController newsDetailsController, Newsdata newsdata) async {
     print("newsdata.newsId! ${newsdata.newsId!}");
-    await  Future.delayed(const Duration(microseconds: 0), () {
-      newsDetailsController.getNewsDetail(newsdata.newsId!,false);
-    } );
+    await Future.delayed(const Duration(microseconds: 0), () {
+      newsDetailsController.getNewsDetail(newsdata.newsId!, false);
+    });
   }
 
-  // _bannerWidget(NewsDetailsController? newsDetailsController) {
-  //   if(newsDetailsController!.isBannerAdReady!){
-  //     return  Container(
-  //       // color: Colors.green,
-  //       width: MediaQuery.of(context).size.width,
-  //       height: newsDetailsController.bannerAd!.size.height.toDouble(),
-  //       child: AdWidget(ad: newsDetailsController.bannerAd!),
-  //
-  //     );
-  //   } else{
-  //    return Container(
-  //       color: Colors.red,
-  //       height: 100,
-  //     );
-  //   }
-  // }
+// _bannerWidget(NewsDetailsController? newsDetailsController) {
+//   if(newsDetailsController!.isBannerAdReady!){
+//     return  Container(
+//       // color: Colors.green,
+//       width: MediaQuery.of(context).size.width,
+//       height: newsDetailsController.bannerAd!.size.height.toDouble(),
+//       child: AdWidget(ad: newsDetailsController.bannerAd!),
+//
+//     );
+//   } else{
+//    return Container(
+//       color: Colors.red,
+//       height: 100,
+//     );
+//   }
+// }
 }

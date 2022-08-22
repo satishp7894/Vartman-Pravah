@@ -36,6 +36,7 @@ class Newsdata {
   String? shortDescription;
   String? newsDate;
   String? image;
+  String? videoUrl;
   String? categoryName;
   String? categoryId;
 
@@ -45,6 +46,7 @@ class Newsdata {
         this.shortDescription,
         this.newsDate,
         this.image,
+        this.videoUrl,
         this.categoryName,this.categoryId});
 
   Newsdata.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class Newsdata {
     shortDescription = json['short_description'];
     newsDate = json['news_date'];
     image = json['image'];
+    videoUrl = json['video_url'];
     categoryName = json['category_name'];
     categoryId = json['category_id'];
   }
@@ -64,6 +67,7 @@ class Newsdata {
     data['short_description'] = this.shortDescription;
     data['news_date'] = this.newsDate;
     data['image'] = this.image;
+    data['video_url'] = this.videoUrl;
     data['category_name'] = this.categoryName;
     data['category_id'] = this.categoryId;
     return data;
