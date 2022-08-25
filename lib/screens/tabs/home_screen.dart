@@ -892,8 +892,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   child: Text(
                                     newsList[index].categoryName!,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
+                                        // overflow: TextOverflow.ellipsis,
                                         color: Style.Colors.mainColor,
                                         fontSize: 12.0),
                                   ),

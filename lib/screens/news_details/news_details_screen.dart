@@ -1087,9 +1087,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
+
                                     nextDataList[index].categoryName!,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
+                                        // overflow: TextOverflow.ellipsis,
                                         color: Style.Colors.mainColor,
                                         fontSize: 12.0),
                                   ),

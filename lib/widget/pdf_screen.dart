@@ -2,15 +2,15 @@
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:internet_file/internet_file.dart';
-import 'package:pdfx/pdfx.dart';
+// import 'package:internet_file/internet_file.dart';
+// import 'package:pdfx/pdfx.dart';
 
 
 class PDFScreeen extends StatefulWidget {
   const PDFScreeen({Key? key}) : super(key: key);
 
   @override
-  State<PDFScreeen> createState() => _PDFScreeenState();
+  State<PDFScreeen>  createState() => _PDFScreeenState();
 }
 
 class _PDFScreeenState extends State<PDFScreeen> {

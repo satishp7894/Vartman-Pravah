@@ -44,7 +44,8 @@ class NewsDetailsController extends GetxController {
       //     ? 'ca-app-pub-8498403144141675/9828738038'
           ? 'ca-app-pub-4354709352726050/1006106436'
       // ? 'ca-app-pub-4354709352726050/1006106436'
-          : 'ca-app-pub-3940256099942544/2934735716',
+      //     : 'ca-app-pub-3940256099942544/2934735716',
+          : 'ca-app-pub-4354709352726050/1669168991',
       size: AdSize.banner,
       request: request,
       listener: BannerAdListener(
