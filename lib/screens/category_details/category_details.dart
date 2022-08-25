@@ -61,17 +61,15 @@ class _CategoryDetailsState extends State<CategoryDetails> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2015, 8),
-      lastDate: selectedDate,
+      lastDate: DateTime(2099, 8),
 
     );
 
     if (picked != null && picked != selectedDate) {
       setState(() {
         final DateFormat formatter = DateFormat('dd-MM-yyyy');
-
-
         date = formatter.format(picked);
-        // selectedDate = picked;
+        selectedDate = picked;
         categoryDetailsController!.getNewsByCategory(widget.categoryId!,date!,false);
         print("selectedDate $date");
       });
@@ -252,8 +250,16 @@ class _CategoryDetailsState extends State<CategoryDetails> {
           // physics: NeverScrollableScrollPhysics(),
           itemCount: newsList.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 0.85),
+              crossAxisCount: 2,
+
+              // childAspectRatio: 0.85
+            mainAxisExtent: 250,
+
+          ),
           itemBuilder: (context, index) {
+            final dt = DateTime.now().difference(DateTime.parse(newsList[index].newsDate!)).inDays;
+            final String newsDate = DateFormat("dd-MMM-yyyy")
+                .format(DateTime.parse(newsList[index].newsDate!));
             return Padding(
               padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0,bottom: 5.0),
               child: GestureDetector(
@@ -301,50 +307,160 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                   ),
                   child: Column(
                     children: <Widget>[
+                      // newsList[index].videoUrl == null || newsList[index].videoUrl == ""
+                      //     ?
+                      // newsList[index].image! == null
+                      //     ? Expanded(
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.only(
+                      //             topLeft: Radius.circular(5.0),
+                      //             topRight: Radius.circular(5.0)),
+                      //         image: DecorationImage(
+                      //             image: AssetImage(
+                      //                 "assets/img/placeholder.jpg"),
+                      //
+                      //             //AssetImage("assets/img/placeholder.jpg"),
+                      //
+                      //             // articles[index].img! == null
+                      //             //     ? AssetImage("aseets/img/placeholder.jpg")
+                      //             //     : NetworkImage(articles[index].img!),
+                      //
+                      //             fit: BoxFit.fill)),
+                      //   ),
+                      // )
+                      //     : Expanded(
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.only(
+                      //             topLeft: Radius.circular(5.0),
+                      //             topRight: Radius.circular(5.0)),
+                      //         image: DecorationImage(
+                      //             image: NetworkImage(
+                      //                 "${imagePath! + newsList[index].image!}"),
+                      //
+                      //             //AssetImage("assets/img/placeholder.jpg"),
+                      //
+                      //             // articles[index].img! == null
+                      //             //     ? AssetImage("aseets/img/placeholder.jpg")
+                      //             //     : NetworkImage(articles[index].img!),
+                      //
+                      //             fit: BoxFit.fill)),
+                      //   ),
+                      // )
+                      //     :newsList[index].image! == null
+                      //     ?
+                      // Expanded(
+                      //   child: Stack(
+                      //
+                      //     children: [
+                      //       Container(
+                      //         decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.only(
+                      //                 topLeft: Radius.circular(5.0),
+                      //                 topRight: Radius.circular(5.0)),
+                      //             image: DecorationImage(
+                      //                 image: AssetImage(
+                      //                     "assets/img/placeholder.jpg"),
+                      //
+                      //                 //AssetImage("assets/img/placeholder.jpg"),
+                      //
+                      //                 // articles[index].img! == null
+                      //                 //     ? AssetImage("aseets/img/placeholder.jpg")
+                      //                 //     : NetworkImage(articles[index].img!),
+                      //
+                      //                 fit: BoxFit.fill)),
+                      //       ),
+                      //       Container(
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.only(right: 5.0),
+                      //           child: Container(
+                      //
+                      //             child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                      //         )
+                      //         ,alignment: Alignment.center,)
+                      //
+                      //     ],
+                      //   ),
+                      // )
+                      //     : Expanded(
+                      //   child: Stack(
+                      //     children: [
+                      //       Container(
+                      //         // height: 100,
+                      //         decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.only(
+                      //                 topLeft: Radius.circular(5.0),
+                      //                 topRight: Radius.circular(5.0)),
+                      //             image: DecorationImage(
+                      //                 image: NetworkImage(
+                      //                     "${imagePath! + newsList[index].image!}"),
+                      //
+                      //                 //AssetImage("assets/img/placeholder.jpg"),
+                      //
+                      //                 // articles[index].img! == null
+                      //                 //     ? AssetImage("aseets/img/placeholder.jpg")
+                      //                 //     : NetworkImage(articles[index].img!),
+                      //
+                      //                 fit: BoxFit.fill)),
+                      //       ),
+                      //       Container(
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.only(right: 5.0),
+                      //           child: Container(
+                      //
+                      //             child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                      //         )
+                      //         ,alignment: Alignment.center,)
+                      //
+                      //       // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                      //     ],
+                      //   ),
+                      // ),
+
                       newsList[index].videoUrl == null || newsList[index].videoUrl == ""
                           ?
                       newsList[index].image! == null
-                          ? Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.0),
-                                  topRight: Radius.circular(5.0)),
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/img/placeholder.jpg"),
+                          ? Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5.0),
+                                topRight: Radius.circular(5.0)),
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/img/placeholder.jpg"),
 
-                                  //AssetImage("assets/img/placeholder.jpg"),
+                                //AssetImage("assets/img/placeholder.jpg"),
 
-                                  // articles[index].img! == null
-                                  //     ? AssetImage("aseets/img/placeholder.jpg")
-                                  //     : NetworkImage(articles[index].img!),
+                                // articles[index].img! == null
+                                //     ? AssetImage("aseets/img/placeholder.jpg")
+                                //     : NetworkImage(articles[index].img!),
 
-                                  fit: BoxFit.fill)),
-                        ),
+                                fit: BoxFit.fill)),
+                        height: 150,
                       )
-                          : Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.0),
-                                  topRight: Radius.circular(5.0)),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      "${imagePath! + newsList[index].image!}"),
+                          : Container(
 
-                                  //AssetImage("assets/img/placeholder.jpg"),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5.0),
+                                topRight: Radius.circular(5.0)),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    "${imagePath! + newsList[index].image!}"),
 
-                                  // articles[index].img! == null
-                                  //     ? AssetImage("aseets/img/placeholder.jpg")
-                                  //     : NetworkImage(articles[index].img!),
+                                //AssetImage("assets/img/placeholder.jpg"),
 
-                                  fit: BoxFit.fill)),
-                        ),
+                                // articles[index].img! == null
+                                //     ? AssetImage("aseets/img/placeholder.jpg")
+                                //     : NetworkImage(articles[index].img!),
+
+                                fit: BoxFit.fill)),
+                        height: 150,
                       )
                           :newsList[index].image! == null
                           ?
-                      Expanded(
+                      Container(
                         child: Stack(
 
                           children: [
@@ -376,8 +492,10 @@ class _CategoryDetailsState extends State<CategoryDetails> {
 
                           ],
                         ),
+                        height: 150,
                       )
-                          : Expanded(
+                          : Container(
+                        height: 150,
                         child: Stack(
                           children: [
                             Container(
@@ -411,50 +529,123 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                           ],
                         ),
                       ),
+                      // Container(
+                      //   padding: EdgeInsets.only(
+                      //       left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      //   child: Text(
+                      //     newsList[index].newsTitle!,
+                      //     textAlign: TextAlign.center,
+                      //     maxLines: 2,
+                      //     style: TextStyle(height: 1.3, fontSize: 15.0),
+                      //   ),
+                      // ),
+                      // Stack(
+                      //   alignment: Alignment.center,
+                      //   children: <Widget>[
+                      //     Container(
+                      //       padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      //       width: 180,
+                      //       height: 1.0,
+                      //       color: Colors.black12,
+                      //     ),
+                      //     Container(
+                      //       width: 30,
+                      //       height: 3.0,
+                      //       color: Style.Colors.mainColor,
+                      //     ),
+                      //   ],
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(10.0),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         newsList[index].categoryName!,
+                      //         style: TextStyle(
+                      //             color: Style.Colors.mainColor, fontSize: 9.0),
+                      //       ),
+                      //       Text(
+                      //         timeUntil(DateTime.parse(newsList[index].newsDate!)),
+                      //         // "timeUntil",
+                      //         style: TextStyle(
+                      //             color: Colors.black54, fontSize: 9.0),
+                      //       )
+                      //     ],
+                      //   ),
+                      // )
+
                       Container(
+                        height: 50,
+
                         padding: EdgeInsets.only(
-                            left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-                        child: Text(
-                          newsList[index].newsTitle!,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          style: TextStyle(height: 1.3, fontSize: 15.0),
+                            left: 10.0,
+                            right: 10.0,
+                            top: 0.0,
+                            bottom: 0.0),
+                        child: Center(
+                          child: Text(
+                            newsList[index].newsTitle!,
+                            // textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle( fontSize: 15.0),
+                          ),
                         ),
                       ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            width: 180,
-                            height: 1.0,
-                            color: Colors.black12,
+                      Container(
+                        child: Column(children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              Container(
+                                padding:
+                                EdgeInsets.only(left: 10.0, right: 10.0),
+                                width: 180,
+                                height: 1.0,
+                                color: Colors.black12,
+                              ),
+                              Container(
+                                width: 30,
+                                height: 3.0,
+                                color: Style.Colors.mainColor,
+                              ),
+                            ],
                           ),
-                          Container(
-                            width: 30,
-                            height: 3.0,
-                            color: Style.Colors.mainColor,
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              newsList[index].categoryName!,
-                              style: TextStyle(
-                                  color: Style.Colors.mainColor, fontSize: 9.0),
+                          Padding(
+                            padding: const EdgeInsets.all(9.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    newsList[index].categoryName!,
+                                    style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Style.Colors.mainColor,
+                                        fontSize: 12.0),
+                                  ),
+                                ),
+                                dt >= 6
+                                    ?Text(
+                                  newsDate,
+                                  // "timeUntil",
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 12.0),
+                                )
+                                    :
+                                Text(
+                                  timeUntil(DateTime.parse(
+                                      newsList[index].newsDate!)),
+                                  // "timeUntil",
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 12.0),
+                                )
+                              ],
                             ),
-                            Text(
-                              timeUntil(DateTime.parse(newsList[index].newsDate!)),
-                              // "timeUntil",
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 9.0),
-                            )
-                          ],
-                        ),
+                          )
+                        ],),
+                        height: 40,
                       )
                     ],
                   ),

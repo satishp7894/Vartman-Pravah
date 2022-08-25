@@ -582,235 +582,304 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         ),
       );
     } else {
+
+
       final String newsDate = DateFormat("dd-MMM-yyyy")
           .format(DateTime.parse(newsDetailList[0].newsDate!));
       // final String newsDate = DateFormat("dd-MMM-yyyy").format(DateTime.parse("2019-09-09"));
       print("newsDate $newsDate");
       print("newsDetailList[0].videoUrl ${newsDetailList[0].videoUrl}");
-      return ListView(
-        children: <Widget>[
-          newsDetailList[0].videoUrl == null || newsDetailList[0].videoUrl == ""
-              ? newsDetailList[0].image! == null
-                  ? AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Container(
-                          padding: EdgeInsets.only(right: 10.0),
-                          width: MediaQuery.of(context).size.width * 2 / 5,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            shape: BoxShape.rectangle,
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image:
-                                    // NetworkImage(imagePath! + newsDetailList[0].image!)
-                                    AssetImage("assets/img/placeholder.jpg")
 
-                                //       image: article.img == null
-                                //   ? AssetImage("assets/img/placeholder.jpg")
-                                // : NetworkImage(article.img)
-                                ),
-                          )),
-                      //             FadeInImage.assetNetwork(
-                      //   alignment: Alignment.topCenter,
-                      //   placeholder: 'images/placeholder.png',
-                      //   image:
-                      //   // article.img == null
-                      //   // ?
-                      //   "http://to-let.com.bd/operator/images/noimage.png"
-                      //   // :
-                      //   // article.img
-                      //   ,
-                      //   fit: BoxFit.cover,
-                      //   width: double.maxFinite,
-                      //   height:  MediaQuery.of(context).size.height*1/3
-                      // ),
-                    )
-                  : AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Container(
-                          padding: EdgeInsets.only(right: 10.0),
-                          width: MediaQuery.of(context).size.width * 2 / 5,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            shape: BoxShape.rectangle,
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(
-                                    imagePath! + newsDetailList[0].image!)
-                                //AssetImage("assets/img/placeholder.jpg")
+      String day = timeUntil(DateTime.parse(newsDetailList[0].newsDate!));
+      final dt = DateTime.now().difference(DateTime.parse(newsDetailList[0].newsDate!)).inDays;
 
-                                //       image: article.img == null
-                                //   ? AssetImage("assets/img/placeholder.jpg")
-                                // : NetworkImage(article.img)
-                                ),
-                          )),
-                      //             FadeInImage.assetNetwork(
-                      //   alignment: Alignment.topCenter,
-                      //   placeholder: 'images/placeholder.png',
-                      //   image:
-                      //   // article.img == null
-                      //   // ?
-                      //   "http://to-let.com.bd/operator/images/noimage.png"
-                      //   // :
-                      //   // article.img
-                      //   ,
-                      //   fit: BoxFit.cover,
-                      //   width: double.maxFinite,
-                      //   height:  MediaQuery.of(context).size.height*1/3
-                      // ),
-                    )
-              :
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: ListView(
+          // physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 150,
+              //height: MediaQuery.of(context).size.height,
+              alignment: Alignment.center,
+              child:
 
-          // Container(
-          //   height: 200,
-          //         child: FlutterYoutubeView(
-          //             // onViewCreated: _onYoutubeCreated,
-          //             // listener: this,
-          //             scaleMode: YoutubeScaleMode.none,
-          //             // <option> fitWidth, fitHeight
-          //             params: YoutubeParam(
-          //                 videoId: "CHaF2Gdqxd8",
-          //                 showUI: false,
-          //                 startSeconds: 0.0, // <option>
-          //                 autoPlay: false) // <option>
-          //             ))
+              Column(
+                children: [
+                  newsDetailList[0].videoUrl == null || newsDetailList[0].videoUrl == ""
+                      ? Container()
+                      :
 
-          Container(height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
-            child: YoutubeView(youtubeUrl: '${newsDetailList[0].videoUrl}'),
-          )
-          ,
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 10.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(newsDate,
-                        style: TextStyle(
-                            color: Style.Colors.mainColor,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(newsDetailList[0].newsTitle!,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 20.0)),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  timeUntil(DateTime.parse(newsDetailList[0].newsDate!)),
-                  style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                // HtmlParser()
-                // Text(document.outerHtml)
-                Html(
-                  data: newsDetailList[0].description,
-                  // renderNewlines: true,
-                  // defaultTextStyle: TextStyle(
-                  //     fontSize: 14.0,
-                  //     color: Colors.black87),
-                ),
-                // _buildCategoryWidget(categoryDetailsController.getCategoryDetailsObj.value)
-                isPageCheck == true
-                    ? Padding(
-                        padding: const EdgeInsets.only(
-                            right: 8.0, left: 8.0, bottom: 3.0),
-                        child: Material(
-                          elevation: 10,
-                          child: Container(
-                            // color: Colors.grey.withOpacity(0.5),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.8),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 1.5,
-                                  spreadRadius: 1.0,
-                                  offset: Offset(
-                                    1.0,
-                                    1.0,
+                  // Container(
+                  //   height: 200,
+                  //         child: FlutterYoutubeView(
+                  //             // onViewCreated: _onYoutubeCreated,
+                  //             // listener: this,
+                  //             scaleMode: YoutubeScaleMode.none,
+                  //             // <option> fitWidth, fitHeight
+                  //             params: YoutubeParam(
+                  //                 videoId: "CHaF2Gdqxd8",
+                  //                 showUI: false,
+                  //                 startSeconds: 0.0, // <option>
+                  //                 autoPlay: false) // <option>
+                  //             ))
+
+                  Container(height: 220,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+                    child: YoutubeView(youtubeUrl: '${newsDetailList[0].videoUrl}'),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        newsDetailList[0].videoUrl == null || newsDetailList[0].videoUrl == ""
+                            ? newsDetailList[0].image! == null
+                            ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Container(
+                                padding: EdgeInsets.only(right: 10.0),
+                                width: MediaQuery.of(context).size.width * 2 / 5,
+                                height: 130,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                                  shape: BoxShape.rectangle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image:
+                                      // NetworkImage(imagePath! + newsDetailList[0].image!)
+                                      AssetImage("assets/img/placeholder.jpg")
+
+                                    //       image: article.img == null
+                                    //   ? AssetImage("assets/img/placeholder.jpg")
+                                    // : NetworkImage(article.img)
                                   ),
-                                )
-                              ],
-                            ),
-                            width: MediaQuery.of(context).size.width,
-                            // height: 70,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                newsDetailList[0].categoryName!,
-                                style: TextStyle(
-                                    color: Style.Colors.mainColor,
-                                    fontSize: 20.0),
-                              ),
-                            ),
+                                )),
+                            //             FadeInImage.assetNetwork(
+                            //   alignment: Alignment.topCenter,
+                            //   placeholder: 'images/placeholder.png',
+                            //   image:
+                            //   // article.img == null
+                            //   // ?
+                            //   "http://to-let.com.bd/operator/images/noimage.png"
+                            //   // :
+                            //   // article.img
+                            //   ,
+                            //   fit: BoxFit.cover,
+                            //   width: double.maxFinite,
+                            //   height:  MediaQuery.of(context).size.height*1/3
+                            // ),
                           ),
-                        ),
-                      )
-                    : Container(),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: _bannerWidget(newsDetailsController),
-                // ),
-                // Obx(() {
-                //   if (newsDetailsController.isBannerAdReady.value == true) {
-                //     return  Padding(
-                //       padding: const EdgeInsets.all(8.0),
-                //       child: Container(
-                //         // color: Colors.green,
-                //         width: MediaQuery.of(context).size.width,
-                //         height: newsDetailsController.bannerAd!.size.height.toDouble(),
-                //         child: AdWidget(ad: newsDetailsController.bannerAd!),
-                //
-                //       ),
-                //     );
-                //   } else {
-                //     return const Center(
-                //       child: CircularProgressIndicator(color: Colors.red),
-                //     );
-                //   }
-                // }),
+                        )
+                            : Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Container(
+                                padding: EdgeInsets.only(right: 10.0),
+                                width: MediaQuery.of(context).size.width * 2 / 5,
+                                height: 130,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                                  shape: BoxShape.rectangle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                          imagePath! + newsDetailList[0].image!)
+                                    //AssetImage("assets/img/placeholder.jpg")
 
-                Obx(() {
-                  if (categoryDetailsController
-                          ?.isLoadingGetCategoryDetail.value !=
-                      true) {
-                    return _buildCategoryWidget(
-                        imagePath, categoryDetailsController!, isPageCheck);
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(color: Colors.red),
-                    );
-                  }
-                }),
-              ],
+                                    //       image: article.img == null
+                                    //   ? AssetImage("assets/img/placeholder.jpg")
+                                    // : NetworkImage(article.img)
+                                  ),
+                                )),
+                            //             FadeInImage.assetNetwork(
+                            //   alignment: Alignment.topCenter,
+                            //   placeholder: 'images/placeholder.png',
+                            //   image:
+                            //   // article.img == null
+                            //   // ?
+                            //   "http://to-let.com.bd/operator/images/noimage.png"
+                            //   // :
+                            //   // article.img
+                            //   ,
+                            //   fit: BoxFit.cover,
+                            //   width: double.maxFinite,
+                            //   height:  MediaQuery.of(context).size.height*1/3
+                            // ),
+                          ),
+                        )
+                            :
+
+                        // Container(
+                        //   height: 200,
+                        //         child: FlutterYoutubeView(
+                        //             // onViewCreated: _onYoutubeCreated,
+                        //             // listener: this,
+                        //             scaleMode: YoutubeScaleMode.none,
+                        //             // <option> fitWidth, fitHeight
+                        //             params: YoutubeParam(
+                        //                 videoId: "CHaF2Gdqxd8",
+                        //                 showUI: false,
+                        //                 startSeconds: 0.0, // <option>
+                        //                 autoPlay: false) // <option>
+                        //             ))
+                        Container()
+                        // Container(height: 220,
+                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+                        //   child: YoutubeView(youtubeUrl: '${newsDetailList[0].videoUrl}'),
+                        // )
+                        ,
+                        Container(
+                          //padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // SizedBox(
+                              //   height: 10.0,
+                              // ),
+                              // DateTime.parse(newsDetailList[0].newsDate!).isBefore(DateTime.parse(newsDetailList[0].newsDate!).add(Duration(days: -10)))
+
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text(newsDetailList[0].newsTitle!,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 20.0)),
+                              ),
+                              dt >= 6
+                                  ?
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text(newsDate,
+                                    style: TextStyle(
+                                      color: Colors.grey,fontSize: 12
+                                        )),
+                              ):Text(
+                                timeUntil(DateTime.parse(newsDetailList[0].newsDate!)),
+                                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                              ),
+                              // SizedBox(
+                              //   height: 10.0,
+                              // ),
+                              // Text(
+                              //   timeUntil(DateTime.parse(newsDetailList[0].newsDate!)),
+                              //   style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                              // ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              // HtmlParser()
+                              // Text(document.outerHtml)
+                              Html(
+                                data: newsDetailList[0].description,
+                                // renderNewlines: true,
+                                // defaultTextStyle: TextStyle(
+                                //     fontSize: 14.0,
+                                //     color: Colors.black87),
+                              ),
+                              // _buildCategoryWidget(categoryDetailsController.getCategoryDetailsObj.value)
+                              isPageCheck == true
+                                  ? Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 8.0, left: 8.0, bottom: 8.0, top: 20),
+                                child: Material(
+                                  elevation: 10,
+                                  child: Container(
+                                    // color: Colors.grey.withOpacity(0.5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.8),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1.5,
+                                          spreadRadius: 1.0,
+                                          offset: Offset(
+                                            1.0,
+                                            1.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    width: MediaQuery.of(context).size.width,
+                                    // height: 70,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        newsDetailList[0].categoryName!,
+                                        style: TextStyle(
+                                            color: Style.Colors.mainColor,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : Container(),
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: _bannerWidget(newsDetailsController),
+                              // ),
+                              // Obx(() {
+                              //   if (newsDetailsController.isBannerAdReady.value == true) {
+                              //     return  Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: Container(
+                              //         // color: Colors.green,
+                              //         width: MediaQuery.of(context).size.width,
+                              //         height: newsDetailsController.bannerAd!.size.height.toDouble(),
+                              //         child: AdWidget(ad: newsDetailsController.bannerAd!),
+                              //
+                              //       ),
+                              //     );
+                              //   } else {
+                              //     return const Center(
+                              //       child: CircularProgressIndicator(color: Colors.red),
+                              //     );
+                              //   }
+                              // }),
+
+                              Obx(() {
+                                if (categoryDetailsController
+                                    ?.isLoadingGetCategoryDetail.value !=
+                                    true) {
+                                  return _buildCategoryWidget(
+                                      imagePath, categoryDetailsController!, isPageCheck);
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(color: Colors.red),
+                                  );
+                                }
+                              }),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ),
-          )
-        ],
+          ],
+        ),
       );
+
+      // return ;
     }
   }
 
@@ -839,7 +908,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.only(
-                        left: 5.0, right: 5.0, bottom: 8.0),
+                        left: 5.0, right: 5.0, bottom: 13.0, top: 20),
                     child: Material(
                       elevation: 10,
                       child: Container(
@@ -877,8 +946,17 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: nextDataList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.85),
+                  crossAxisCount: 2,
+
+                  //childAspectRatio: 0.85
+
+                mainAxisExtent: 250,
+              ),
               itemBuilder: (context, index) {
+
+                final dt = DateTime.now().difference(DateTime.parse(nextDataList[index].newsDate!)).inDays;
+                final String newsDate = DateFormat("dd-MMM-yyyy")
+                    .format(DateTime.parse(nextDataList[index].newsDate!));
                 return Padding(
                   padding: const EdgeInsets.only(
                       left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
@@ -940,50 +1018,215 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
+                          // nextDataList[index].videoUrl == null || nextDataList[index].videoUrl == ""
+                          //     ?
+                          // nextDataList[index].image! == null
+                          //     ? Expanded(
+                          //   child: Container(
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.only(
+                          //             topLeft: Radius.circular(5.0),
+                          //             topRight: Radius.circular(5.0)),
+                          //         image: DecorationImage(
+                          //             image: AssetImage(
+                          //                 "assets/img/placeholder.jpg"),
+                          //
+                          //             //AssetImage("assets/img/placeholder.jpg"),
+                          //
+                          //             // articles[index].img! == null
+                          //             //     ? AssetImage("aseets/img/placeholder.jpg")
+                          //             //     : NetworkImage(articles[index].img!),
+                          //
+                          //             fit: BoxFit.fill)),
+                          //   ),
+                          // )
+                          //     : Expanded(
+                          //   child: Container(
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.only(
+                          //             topLeft: Radius.circular(5.0),
+                          //             topRight: Radius.circular(5.0)),
+                          //         image: DecorationImage(
+                          //             image: NetworkImage(
+                          //                 "${imagePath! + nextDataList[index].image!}"),
+                          //
+                          //             //AssetImage("assets/img/placeholder.jpg"),
+                          //
+                          //             // articles[index].img! == null
+                          //             //     ? AssetImage("aseets/img/placeholder.jpg")
+                          //             //     : NetworkImage(articles[index].img!),
+                          //
+                          //             fit: BoxFit.fill)),
+                          //   ),
+                          // )
+                          //     :nextDataList[index].image! == null
+                          //     ?
+                          // Expanded(
+                          //   child: Stack(
+                          //
+                          //     children: [
+                          //       Container(
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.only(
+                          //                 topLeft: Radius.circular(5.0),
+                          //                 topRight: Radius.circular(5.0)),
+                          //             image: DecorationImage(
+                          //                 image: AssetImage(
+                          //                     "assets/img/placeholder.jpg"),
+                          //
+                          //                 //AssetImage("assets/img/placeholder.jpg"),
+                          //
+                          //                 // articles[index].img! == null
+                          //                 //     ? AssetImage("aseets/img/placeholder.jpg")
+                          //                 //     : NetworkImage(articles[index].img!),
+                          //
+                          //                 fit: BoxFit.fill)),
+                          //       ),
+                          //       Container(
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.only(right: 5.0),
+                          //           child: Container(
+                          //
+                          //             child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                          //         )
+                          //         ,alignment: Alignment.center,)
+                          //
+                          //     ],
+                          //   ),
+                          // )
+                          //     : Expanded(
+                          //   child: Stack(
+                          //     children: [
+                          //       Container(
+                          //         // height: 100,
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.only(
+                          //                 topLeft: Radius.circular(5.0),
+                          //                 topRight: Radius.circular(5.0)),
+                          //             image: DecorationImage(
+                          //                 image: NetworkImage(
+                          //                     "${imagePath! + nextDataList[index].image!}"),
+                          //
+                          //                 //AssetImage("assets/img/placeholder.jpg"),
+                          //
+                          //                 // articles[index].img! == null
+                          //                 //     ? AssetImage("aseets/img/placeholder.jpg")
+                          //                 //     : NetworkImage(articles[index].img!),
+                          //
+                          //                 fit: BoxFit.fill)),
+                          //       ),
+                          //       Container(
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.only(right: 5.0),
+                          //           child: Container(
+                          //
+                          //             child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                          //         )
+                          //         ,alignment: Alignment.center,)
+                          //
+                          //       // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                          //     ],
+                          //   ),
+                          // ),
+                          // Container(
+                          //   padding: EdgeInsets.only(
+                          //       left: 10.0,
+                          //       right: 10.0,
+                          //       top: 10.0,
+                          //       bottom: 10.0),
+                          //   child: Text(
+                          //     nextDataList[index].newsTitle!,
+                          //     textAlign: TextAlign.center,
+                          //     maxLines: 2,
+                          //     style: TextStyle(height: 1.3, fontSize: 15.0),
+                          //   ),
+                          // ),
+                          // Stack(
+                          //   alignment: Alignment.center,
+                          //   children: <Widget>[
+                          //     Container(
+                          //       padding:
+                          //           EdgeInsets.only(left: 10.0, right: 10.0),
+                          //       width: 180,
+                          //       height: 1.0,
+                          //       color: Colors.black12,
+                          //     ),
+                          //     Container(
+                          //       width: 30,
+                          //       height: 3.0,
+                          //       color: Style.Colors.mainColor,
+                          //     ),
+                          //   ],
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(10.0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Expanded(
+                          //         child: Text(
+                          //           nextDataList[index].categoryName!,
+                          //           style: TextStyle(
+                          //               overflow: TextOverflow.ellipsis,
+                          //               color: Style.Colors.mainColor,
+                          //               fontSize: 12.0),
+                          //         ),
+                          //       ),
+                          //       Text(
+                          //         timeUntil(DateTime.parse(
+                          //             nextDataList[index].newsDate!)),
+                          //         // "timeUntil",
+                          //         style: TextStyle(
+                          //             color: Colors.black54, fontSize: 12.0),
+                          //       )
+                          //     ],
+                          //   ),
+                          // )
+
+
                           nextDataList[index].videoUrl == null || nextDataList[index].videoUrl == ""
                               ?
                           nextDataList[index].image! == null
-                              ? Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5.0),
-                                      topRight: Radius.circular(5.0)),
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/img/placeholder.jpg"),
+                              ? Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.0),
+                                    topRight: Radius.circular(5.0)),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/img/placeholder.jpg"),
 
-                                      //AssetImage("assets/img/placeholder.jpg"),
+                                    //AssetImage("assets/img/placeholder.jpg"),
 
-                                      // articles[index].img! == null
-                                      //     ? AssetImage("aseets/img/placeholder.jpg")
-                                      //     : NetworkImage(articles[index].img!),
+                                    // articles[index].img! == null
+                                    //     ? AssetImage("aseets/img/placeholder.jpg")
+                                    //     : NetworkImage(articles[index].img!),
 
-                                      fit: BoxFit.fill)),
-                            ),
+                                    fit: BoxFit.fill)),
+                            height: 150,
                           )
-                              : Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5.0),
-                                      topRight: Radius.circular(5.0)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${imagePath! + nextDataList[index].image!}"),
+                              : Container(
 
-                                      //AssetImage("assets/img/placeholder.jpg"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.0),
+                                    topRight: Radius.circular(5.0)),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        "${imagePath! + nextDataList[index].image!}"),
 
-                                      // articles[index].img! == null
-                                      //     ? AssetImage("aseets/img/placeholder.jpg")
-                                      //     : NetworkImage(articles[index].img!),
+                                    //AssetImage("assets/img/placeholder.jpg"),
 
-                                      fit: BoxFit.fill)),
-                            ),
+                                    // articles[index].img! == null
+                                    //     ? AssetImage("aseets/img/placeholder.jpg")
+                                    //     : NetworkImage(articles[index].img!),
+
+                                    fit: BoxFit.fill)),
+                            height: 150,
                           )
                               :nextDataList[index].image! == null
                               ?
-                          Expanded(
+                          Container(
                             child: Stack(
 
                               children: [
@@ -1015,8 +1258,10 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 
                               ],
                             ),
+                            height: 150,
                           )
-                              : Expanded(
+                              : Container(
+                            height: 150,
                             child: Stack(
                               children: [
                                 Container(
@@ -1050,59 +1295,123 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                               ],
                             ),
                           ),
+                          // Container(
+                          //   padding: EdgeInsets.only(
+                          //       left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                          //   child: Text(
+                          //     newsList[index].newsTitle!,
+                          //     textAlign: TextAlign.center,
+                          //     maxLines: 2,
+                          //     style: TextStyle(height: 1.3, fontSize: 15.0),
+                          //   ),
+                          // ),
+                          // Stack(
+                          //   alignment: Alignment.center,
+                          //   children: <Widget>[
+                          //     Container(
+                          //       padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          //       width: 180,
+                          //       height: 1.0,
+                          //       color: Colors.black12,
+                          //     ),
+                          //     Container(
+                          //       width: 30,
+                          //       height: 3.0,
+                          //       color: Style.Colors.mainColor,
+                          //     ),
+                          //   ],
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(10.0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Text(
+                          //         newsList[index].categoryName!,
+                          //         style: TextStyle(
+                          //             color: Style.Colors.mainColor, fontSize: 9.0),
+                          //       ),
+                          //       Text(
+                          //         timeUntil(DateTime.parse(newsList[index].newsDate!)),
+                          //         // "timeUntil",
+                          //         style: TextStyle(
+                          //             color: Colors.black54, fontSize: 9.0),
+                          //       )
+                          //     ],
+                          //   ),
+                          // )
+
                           Container(
+                            height: 50,
+
                             padding: EdgeInsets.only(
                                 left: 10.0,
                                 right: 10.0,
-                                top: 10.0,
-                                bottom: 10.0),
-                            child: Text(
-                              nextDataList[index].newsTitle!,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: TextStyle(height: 1.3, fontSize: 15.0),
+                                top: 0.0,
+                                bottom: 0.0),
+                            child: Center(
+                              child: Text(
+                                nextDataList[index].newsTitle!,
+                                // textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle( fontSize: 15.0),
+                              ),
                             ),
                           ),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Container(
-                                padding:
+                          Container(
+                            child: Column(children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    padding:
                                     EdgeInsets.only(left: 10.0, right: 10.0),
-                                width: 180,
-                                height: 1.0,
-                                color: Colors.black12,
-                              ),
-                              Container(
-                                width: 30,
-                                height: 3.0,
-                                color: Style.Colors.mainColor,
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    nextDataList[index].categoryName!,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Style.Colors.mainColor,
-                                        fontSize: 12.0),
+                                    width: 180,
+                                    height: 1.0,
+                                    color: Colors.black12,
                                   ),
+                                  Container(
+                                    width: 30,
+                                    height: 3.0,
+                                    color: Style.Colors.mainColor,
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(9.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        nextDataList[index].categoryName!,
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Style.Colors.mainColor,
+                                            fontSize: 12.0),
+                                      ),
+                                    ),
+                                    dt >= 6
+                                        ?Text(
+                                      newsDate,
+                                      // "timeUntil",
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 12.0),
+                                    )
+                                        :
+                                    Text(
+                                      timeUntil(DateTime.parse(
+                                          nextDataList[index].newsDate!)),
+                                      // "timeUntil",
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 12.0),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  timeUntil(DateTime.parse(
-                                      nextDataList[index].newsDate!)),
-                                  // "timeUntil",
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 12.0),
-                                )
-                              ],
-                            ),
+                              )
+                            ],),
+                            height: 40,
                           )
                         ],
                       ),
