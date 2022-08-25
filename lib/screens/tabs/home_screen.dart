@@ -739,10 +739,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: newsList.length,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                crossAxisCount: 2,
 
-                  // childAspectRatio: 1.00
-                  // ,
+                // childAspectRatio: 1.00
+                // ,
                 mainAxisExtent: 250,
 
               ),
@@ -762,18 +762,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           int.parse(newsList[index].categoryId!) - 1;
                       print("categoryId ${newsList[index].categoryName}");
                       final categoryDetailsController =
-                          Get.find<CategoryDetailsController>();
+                      Get.find<CategoryDetailsController>();
                       // categoryDetailsController.getNewsByCategory(categoryId.toString(),"",false);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => NewsDetailScreen(
-                                    isBool: true,
-                                    newsData: newsList[index],
-                                    imagePath: imagePath,
-                                    isPageCheck: true,
-                                    // article: articles[index],
-                                  )));
+                                isBool: true,
+                                newsData: newsList[index],
+                                imagePath: imagePath,
+                                isPageCheck: true,
+                                // article: articles[index],
+                              )));
                       //Get.toNamed(Routes.newsDetails, arguments: newsList[index]);
                       // Navigator.push(
                       //     context,
@@ -801,117 +801,117 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
-                           newsList[index].videoUrl == null || newsList[index].videoUrl == ""
-                          ?
+                          newsList[index].videoUrl == null || newsList[index].videoUrl == ""
+                              ?
                           newsList[index].image! == null
                               ? Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(5.0),
-                                        topRight: Radius.circular(5.0)),
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            "assets/img/placeholder.jpg"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.0),
+                                    topRight: Radius.circular(5.0)),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/img/placeholder.jpg"),
 
-                                        //AssetImage("assets/img/placeholder.jpg"),
+                                    //AssetImage("assets/img/placeholder.jpg"),
 
-                                        // articles[index].img! == null
-                                        //     ? AssetImage("aseets/img/placeholder.jpg")
-                                        //     : NetworkImage(articles[index].img!),
+                                    // articles[index].img! == null
+                                    //     ? AssetImage("aseets/img/placeholder.jpg")
+                                    //     : NetworkImage(articles[index].img!),
 
-                                        fit: BoxFit.fill)),
-                                height: 150,
-                              )
+                                    fit: BoxFit.fill)),
+                            height: 150,
+                          )
                               : Container(
 
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(5.0),
-                                        topRight: Radius.circular(5.0)),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            "${imagePath! + newsList[index].image!}"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.0),
+                                    topRight: Radius.circular(5.0)),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        "${imagePath! + newsList[index].image!}"),
 
-                                        //AssetImage("assets/img/placeholder.jpg"),
+                                    //AssetImage("assets/img/placeholder.jpg"),
 
-                                        // articles[index].img! == null
-                                        //     ? AssetImage("aseets/img/placeholder.jpg")
-                                        //     : NetworkImage(articles[index].img!),
+                                    // articles[index].img! == null
+                                    //     ? AssetImage("aseets/img/placeholder.jpg")
+                                    //     : NetworkImage(articles[index].img!),
 
-                                        fit: BoxFit.fill)),
+                                    fit: BoxFit.fill)),
                             height: 150,
-                              )
-                          :newsList[index].image! == null
+                          )
+                              :newsList[index].image! == null
                               ?
                           Container(
                             child: Stack(
 
-                                  children: [
-                                    Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(5.0),
-                                                  topRight: Radius.circular(5.0)),
-                                              image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "assets/img/placeholder.jpg"),
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          topRight: Radius.circular(5.0)),
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              "assets/img/placeholder.jpg"),
 
-                                                  //AssetImage("assets/img/placeholder.jpg"),
+                                          //AssetImage("assets/img/placeholder.jpg"),
 
-                                                  // articles[index].img! == null
-                                                  //     ? AssetImage("aseets/img/placeholder.jpg")
-                                                  //     : NetworkImage(articles[index].img!),
+                                          // articles[index].img! == null
+                                          //     ? AssetImage("aseets/img/placeholder.jpg")
+                                          //     : NetworkImage(articles[index].img!),
 
-                                                  fit: BoxFit.fill)),
-                                    ),
-                                    Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 5.0),
-                                        child: Container(
-
-                                          child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
-                                      )
-                                      ,alignment: Alignment.center,)
-
-                                  ],
+                                          fit: BoxFit.fill)),
                                 ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: Container(
+
+                                      child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                  )
+                                  ,alignment: Alignment.center,)
+
+                              ],
+                            ),
                             height: 150,
                           )
                               : Container(
-                             height: 150,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      // height: 100,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(5.0),
-                                                  topRight: Radius.circular(5.0)),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      "${imagePath! + newsList[index].image!}"),
+                            height: 150,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  // height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          topRight: Radius.circular(5.0)),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              "${imagePath! + newsList[index].image!}"),
 
-                                                  //AssetImage("assets/img/placeholder.jpg"),
+                                          //AssetImage("assets/img/placeholder.jpg"),
 
-                                                  // articles[index].img! == null
-                                                  //     ? AssetImage("aseets/img/placeholder.jpg")
-                                                  //     : NetworkImage(articles[index].img!),
+                                          // articles[index].img! == null
+                                          //     ? AssetImage("aseets/img/placeholder.jpg")
+                                          //     : NetworkImage(articles[index].img!),
 
-                                                  fit: BoxFit.fill)),
-                                    ),
-                                    Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 5.0),
-                                        child: Container(
-
-                                            child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
-                                      )
-                                      ,alignment: Alignment.center,)
-
-                                    // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
-                                  ],
+                                          fit: BoxFit.fill)),
                                 ),
-                              ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: Container(
+
+                                      child: Image.asset("assets/img/youtube.png",),height: 40,width: 40,),
+                                  )
+                                  ,alignment: Alignment.center,)
+
+                                // Center(child: Text("YouTube",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),))
+                              ],
+                            ),
+                          ),
                           Container(
                             height: 50,
 
@@ -983,41 +983,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             ],),
                             height: 40,
-                                width: 180,
-                                height: 1.0,
-                                color: Colors.black12,
-                              ),
-                              Container(
-                                width: 30,
-                                height: 3.0,
-                                color: Style.Colors.mainColor,
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    newsList[index].categoryName!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        // overflow: TextOverflow.ellipsis,
-                                        color: Style.Colors.mainColor,
-                                        fontSize: 12.0),
-                                  ),
-                                ),
-                                Text(
-                                  timeUntil(DateTime.parse(
-                                      newsList[index].newsDate!)),
-                                  // "timeUntil",
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 12.0),
-                                )
-                              ],
-                            ),
                           )
                         ],
                       ),

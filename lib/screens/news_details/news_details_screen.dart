@@ -1411,45 +1411,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                                 ),
                               )
                             ],),
-                            height: 40,
-                                width: 180,
-                                height: 1.0,
-                                color: Colors.black12,
-                              ),
-                              Container(
-                                width: 30,
-                                height: 3.0,
-                                color: Style.Colors.mainColor,
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-
-                                    nextDataList[index].categoryName!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        // overflow: TextOverflow.ellipsis,
-                                        color: Style.Colors.mainColor,
-                                        fontSize: 12.0),
-                                  ),
-                                ),
-                                Text(
-                                  timeUntil(DateTime.parse(
-                                      nextDataList[index].newsDate!)),
-                                  // "timeUntil",
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 12.0),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                            height: 40,)
+                                                       ],
                       ),
                     ),
                   ),
