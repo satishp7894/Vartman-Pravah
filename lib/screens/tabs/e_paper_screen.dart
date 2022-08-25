@@ -167,14 +167,14 @@ class _EPaperScreenState extends State<EPaperScreen> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2015, 8),
-      lastDate: selectedDate,
+      lastDate: DateTime(2099, 8),
     );
 
     if (picked != null && picked != selectedDate) {
       setState(() {
         final DateFormat formatter = DateFormat('dd-MM-yyyy');
         date = formatter.format(picked);
-        // selectedDate = picked;
+        selectedDate = picked;
         homeController.getEPaper(date!, false);
         print("selectedDate $date");
       });
@@ -289,155 +289,458 @@ class _EPaperScreenState extends State<EPaperScreen> {
           ],
         ),
       );
-    } else
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          // height: articles.length / 2 * 210.0,
-          // padding: EdgeInsets.all(5.0),
-          child: new GridView.builder(
-            // physics: NeverScrollableScrollPhysics(),
-            itemCount: ePaperDataList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 0.85),
-            itemBuilder: (context, index) {
-              final String newsDate = DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[index].date!));
-              print("newsDate $newsDate");
-              return Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.pdfScreen, arguments: [
-                      {
-                        "pdfPath":
-                            pdfPath! + ePaperDataList[index].fileAttechments!
-                      },
-                      {"title": ePaperDataList[index].epaperTitle!}
-                    ]);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PDFScreeen(
-                    //             pdfLink: pdfPath!+ePaperDataList[index].fileAttechments!,
-                    //         )));
+    } else {
+      // final dt = DateTime.now().difference(DateTime.parse(ePaperDataList[0].newsDate!)).inDays;
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: ListView(
+          // physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+         Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height-175,
+        child: Center(
+          child:
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.pdfScreen, arguments: [
+                  {
+                    "pdfPath":
+                    pdfPath! + ePaperDataList[0].fileAttechments!
                   },
-                  child: Container(
-                    width: 220.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 1.5,
-                          spreadRadius: 1.0,
-                          offset: Offset(
-                            1.0,
-                            1.0,
-                          ),
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        ePaperDataList[index].paperImg! == null
-                            ? Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(5.0),
-                                          topRight: Radius.circular(5.0)),
-                                      image: DecorationImage(
-                                          image:
-                                              // NetworkImage(imagePath!+ePaperDataList[index].paperImg!),
-                                              AssetImage(
-                                                  "assets/img/placeholder.jpg"),
-
-                                          // articles[index].img! == null
-                                          //     ? AssetImage("aseets/img/placeholder.jpg")
-                                          //     : NetworkImage(articles[index].img!),
-
-                                          fit: BoxFit.fill)),
-                                  // height: 150,
-                                ),
-                              )
-                            : Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(5.0),
-                                          topRight: Radius.circular(5.0)),
-                                      image: DecorationImage(
-                                          image: NetworkImage(imagePath! +
-                                              ePaperDataList[index].paperImg!),
-                                          //AssetImage("assets/img/placeholder.jpg"),
-
-                                          // articles[index].img! == null
-                                          //     ? AssetImage("aseets/img/placeholder.jpg")
-                                          //     : NetworkImage(articles[index].img!),
-
-                                          fit: BoxFit.fill)),
-                                  // height: 150,
-                                ),
-                              ),
-                        Container(
-                          padding: EdgeInsets.only(
-                              left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-                          child: Text(
-                            ePaperDataList[index].epaperTitle!,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: TextStyle(
-                                height: 1.3,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                              width: 180,
-                              height: 1.0,
-                              color: Colors.black12,
-                            ),
-                            Container(
-                              width: 30,
-                              height: 3.0,
-                              color: Style.Colors.mainColor,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                newsDate,
-                                style: TextStyle(
-                                    color: Style.Colors.mainColor,
-                                    fontSize: 12.0),
-                              ),
-                              Text(
-                                timeUntil(DateTime.parse(
-                                    ePaperDataList[index].date!)),
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12.0),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  {"title": ePaperDataList[0].epaperTitle!}
+                ]);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => PDFScreeen(
+                //             pdfLink: pdfPath!+ePaperDataList[index].fileAttechments!,
+                //         )));
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 220.0,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 1.5,
+                      spreadRadius: 1.0,
+                      offset: Offset(
+                        1.0,
+                        1.0,
+                      ),
+                    )
+                  ],
                 ),
-              );
-            },
+                child: Column(
+                  children: <Widget>[
+                    ePaperDataList[0].paperImg! == null
+                        ? Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0)),
+                          image: DecorationImage(
+                              image:
+                              // NetworkImage(imagePath!+ePaperDataList[index].paperImg!),
+                              AssetImage(
+                                  "assets/img/placeholder.jpg"),
+
+                              // articles[index].img! == null
+                              //     ? AssetImage("aseets/img/placeholder.jpg")
+                              //     : NetworkImage(articles[index].img!),
+
+                              fit: BoxFit.fill)),
+                      // height: 150,
+                    )
+                        : Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0)),
+                          image: DecorationImage(
+                              image: NetworkImage(imagePath! +
+                                  ePaperDataList[0].paperImg!),
+                              //AssetImage("assets/img/placeholder.jpg"),
+
+                              // articles[index].img! == null
+                              //     ? AssetImage("aseets/img/placeholder.jpg")
+                              //     : NetworkImage(articles[index].img!),
+
+                              fit: BoxFit.fill)),
+                      // height: 150,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: Text(
+                        ePaperDataList[0].epaperTitle!,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            height: 1.3,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          width: 180,
+                          height: 1.0,
+                          color: Colors.black12,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 3.0,
+                          color: Style.Colors.mainColor,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Text(
+                          //   DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[0].date!)),
+                          //   style: TextStyle(
+                          //       color: Style.Colors.mainColor,
+                          //       fontSize: 12.0),
+                          // ),
+                          DateTime.now().difference(DateTime.parse(ePaperDataList[0].date!)).inDays >= 6 ?
+                          Text(
+                            DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[0].date!)),
+                            // "timeUntil",
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
+                          ):
+                          Text(
+                            timeUntil(DateTime.parse(
+                                ePaperDataList[0].date!)),
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      )
+
+          ],
+        ),
+      );
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+          child:
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.pdfScreen, arguments: [
+                  {
+                    "pdfPath":
+                    pdfPath! + ePaperDataList[0].fileAttechments!
+                  },
+                  {"title": ePaperDataList[0].epaperTitle!}
+                ]);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => PDFScreeen(
+                //             pdfLink: pdfPath!+ePaperDataList[index].fileAttechments!,
+                //         )));
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 220.0,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 1.5,
+                      spreadRadius: 1.0,
+                      offset: Offset(
+                        1.0,
+                        1.0,
+                      ),
+                    )
+                  ],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    ePaperDataList[0].paperImg! == null
+                        ? Container(
+                      height: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.0),
+                                  topRight: Radius.circular(5.0)),
+                              image: DecorationImage(
+                                  image:
+                                  // NetworkImage(imagePath!+ePaperDataList[index].paperImg!),
+                                  AssetImage(
+                                      "assets/img/placeholder.jpg"),
+
+                                  // articles[index].img! == null
+                                  //     ? AssetImage("aseets/img/placeholder.jpg")
+                                  //     : NetworkImage(articles[index].img!),
+
+                                  fit: BoxFit.fill)),
+                          // height: 150,
+                        )
+                        : Container(
+                      height: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.0),
+                                  topRight: Radius.circular(5.0)),
+                              image: DecorationImage(
+                                  image: NetworkImage(imagePath! +
+                                      ePaperDataList[0].paperImg!),
+                                  //AssetImage("assets/img/placeholder.jpg"),
+
+                                  // articles[index].img! == null
+                                  //     ? AssetImage("aseets/img/placeholder.jpg")
+                                  //     : NetworkImage(articles[index].img!),
+
+                                  fit: BoxFit.fill)),
+                          // height: 150,
+                        ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: Text(
+                        ePaperDataList[0].epaperTitle!,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            height: 1.3,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          width: 180,
+                          height: 1.0,
+                          color: Colors.black12,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 3.0,
+                          color: Style.Colors.mainColor,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Text(
+                          //   DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[0].date!)),
+                          //   style: TextStyle(
+                          //       color: Style.Colors.mainColor,
+                          //       fontSize: 12.0),
+                          // ),
+                          DateTime.now().difference(DateTime.parse(ePaperDataList[0].date!)).inDays >= 6 ?
+                          Text(
+                            DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[0].date!)),
+                            // "timeUntil",
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
+                          ):
+                          Text(
+                            timeUntil(DateTime.parse(
+                                ePaperDataList[0].date!)),
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       );
+    }
+      // return Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: Container(
+      //     // height: articles.length / 2 * 210.0,
+      //     // padding: EdgeInsets.all(5.0),
+      //     child: new GridView.builder(
+      //       // physics: NeverScrollableScrollPhysics(),
+      //       itemCount: ePaperDataList.length,
+      //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      //           crossAxisCount: 2, childAspectRatio: 0.85),
+      //       itemBuilder: (context, index) {
+      //         final String newsDate = DateFormat("dd-MMM-yyyy").format(DateTime.parse(ePaperDataList[index].date!));
+      //         print("newsDate $newsDate");
+      //         return Padding(
+      //           padding: const EdgeInsets.all(5.0),
+      //           child: GestureDetector(
+      //             onTap: () {
+      //               Get.toNamed(Routes.pdfScreen, arguments: [
+      //                 {
+      //                   "pdfPath":
+      //                       pdfPath! + ePaperDataList[index].fileAttechments!
+      //                 },
+      //                 {"title": ePaperDataList[index].epaperTitle!}
+      //               ]);
+      //               // Navigator.push(
+      //               //     context,
+      //               //     MaterialPageRoute(
+      //               //         builder: (context) => PDFScreeen(
+      //               //             pdfLink: pdfPath!+ePaperDataList[index].fileAttechments!,
+      //               //         )));
+      //             },
+      //             child: Container(
+      //               width: 220.0,
+      //               decoration: BoxDecoration(
+      //                 color: Colors.white,
+      //                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
+      //                 boxShadow: [
+      //                   BoxShadow(
+      //                     color: Colors.grey,
+      //                     blurRadius: 1.5,
+      //                     spreadRadius: 1.0,
+      //                     offset: Offset(
+      //                       1.0,
+      //                       1.0,
+      //                     ),
+      //                   )
+      //                 ],
+      //               ),
+      //               child: Column(
+      //                 children: <Widget>[
+      //                   ePaperDataList[index].paperImg! == null
+      //                       ? Expanded(
+      //                           child: Container(
+      //                             decoration: BoxDecoration(
+      //                                 borderRadius: BorderRadius.only(
+      //                                     topLeft: Radius.circular(5.0),
+      //                                     topRight: Radius.circular(5.0)),
+      //                                 image: DecorationImage(
+      //                                     image:
+      //                                         // NetworkImage(imagePath!+ePaperDataList[index].paperImg!),
+      //                                         AssetImage(
+      //                                             "assets/img/placeholder.jpg"),
+      //
+      //                                     // articles[index].img! == null
+      //                                     //     ? AssetImage("aseets/img/placeholder.jpg")
+      //                                     //     : NetworkImage(articles[index].img!),
+      //
+      //                                     fit: BoxFit.fill)),
+      //                             // height: 150,
+      //                           ),
+      //                         )
+      //                       : Expanded(
+      //                           child: Container(
+      //                             decoration: BoxDecoration(
+      //                                 borderRadius: BorderRadius.only(
+      //                                     topLeft: Radius.circular(5.0),
+      //                                     topRight: Radius.circular(5.0)),
+      //                                 image: DecorationImage(
+      //                                     image: NetworkImage(imagePath! +
+      //                                         ePaperDataList[index].paperImg!),
+      //                                     //AssetImage("assets/img/placeholder.jpg"),
+      //
+      //                                     // articles[index].img! == null
+      //                                     //     ? AssetImage("aseets/img/placeholder.jpg")
+      //                                     //     : NetworkImage(articles[index].img!),
+      //
+      //                                     fit: BoxFit.fill)),
+      //                             // height: 150,
+      //                           ),
+      //                         ),
+      //                   Container(
+      //                     padding: EdgeInsets.only(
+      //                         left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+      //                     child: Text(
+      //                       ePaperDataList[index].epaperTitle!,
+      //                       textAlign: TextAlign.center,
+      //                       maxLines: 2,
+      //                       style: TextStyle(
+      //                           height: 1.3,
+      //                           fontSize: 15.0,
+      //                           fontWeight: FontWeight.bold),
+      //                     ),
+      //                   ),
+      //                   Stack(
+      //                     alignment: Alignment.center,
+      //                     children: <Widget>[
+      //                       Container(
+      //                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      //                         width: 180,
+      //                         height: 1.0,
+      //                         color: Colors.black12,
+      //                       ),
+      //                       Container(
+      //                         width: 30,
+      //                         height: 3.0,
+      //                         color: Style.Colors.mainColor,
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   Padding(
+      //                     padding: const EdgeInsets.all(10.0),
+      //                     child: Row(
+      //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                       children: [
+      //                         Text(
+      //                           newsDate,
+      //                           style: TextStyle(
+      //                               color: Style.Colors.mainColor,
+      //                               fontSize: 12.0),
+      //                         ),
+      //                         Text(
+      //                           timeUntil(DateTime.parse(
+      //                               ePaperDataList[index].date!)),
+      //                           style: TextStyle(
+      //                               color: Colors.black54, fontSize: 12.0),
+      //                         )
+      //                       ],
+      //                     ),
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         );
+      //       },
+      //     ),
+      //   ),
+      // );
   }
 
   String timeUntil(DateTime date) {

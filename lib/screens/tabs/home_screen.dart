@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:news/constants/app_costants.dart';
 import 'package:news/models/get_all_category.dart';
 import 'package:news/models/get_today_news.dart';
@@ -125,16 +126,124 @@ class _HomeScreenState extends State<HomeScreen> {
                       Obx(() {
                         if (homeController.isLoadingGetTodayNews.value !=
                             true) {
-                          return _buildSliderWidget(
-                              homeController.getTodayNewsObj.value);
+                          return  Column(
+                            children: [
+                              Obx(() {
+                                if (homeController.isLoadingGetTodayNews.value !=
+                                    true) {
+                                  return _buildSliderWidget(
+                                      homeController.getTodayNewsObj.value);
+                                } else {
+                                  if (homeController.isRefreshGetTodayNews.value !=
+                                      true) {
+                                    return Container(
+                                      height: 200,
+                                      // child: Center(
+                                      //     child: CircularProgressIndicator(
+                                      //         color: Style.Colors.appColor))
+                                    );
+                                  } else {
+                                    return Container(
+                                      height: 200,
+                                    );
+                                  }
+                                }
+                              }),
+
+                              Obx(() {
+                                if (homeController.isLoadingGetCategory.value != true) {
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Row(
+                                          children: const <Widget>[
+                                            Text(
+                                              "Category",
+                                              style: TextStyle(
+                                                // color: Colors.black45,
+                                                  color: Style.Colors.titleColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17.0),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      _buildCategoryWidget(
+                                          homeController.getCategoryObj.value),
+                                    ],
+                                  );
+                                } else {
+                                  if (homeController.isRefreshGetTodayNews.value !=
+                                      true) {
+                                    return Container(
+                                      height: 90,
+                                      // child: Center(
+                                      //     child: CircularProgressIndicator(
+                                      //         color: Style.Colors.appColor))
+                                    );
+                                  } else {
+                                    return Container(
+                                      height: 90,
+                                    );
+                                  }
+                                }
+                              }),
+
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Obx(() {
+                                  if (homeController.isLoadingGetTodayNews.value !=
+                                      true) {
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "News",
+                                                style: TextStyle(
+                                                    color: Style.Colors.titleColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 17.0),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        _buildTodayNewsWidget(
+                                            homeController.getTodayNewsObj.value),
+                                      ],
+                                    );
+                                  } else {
+                                    if (homeController.isRefreshGetTodayNews.value !=
+                                        true) {
+                                      return Container(
+                                        height: 200,
+                                        // child: Center(
+                                        //     child: CircularProgressIndicator(
+                                        //         color: Style.Colors.appColor))
+                                      );
+                                    } else {
+                                      return Container(
+                                        height: 200,
+                                      );
+                                    }
+                                  }
+                                }),
+                              ),
+                              // HotNewsWidget()
+                            ],
+                          );
                         } else {
                           if (homeController.isRefreshGetTodayNews.value !=
                               true) {
                             return Container(
-                                height: 200,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                        color: Style.Colors.appColor)));
+                              height: MediaQuery.of(context).size.height-120,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                      color: Style.Colors.appColor))
+                            );
                           } else {
                             return Container(
                               height: 200,
@@ -142,78 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         }
                       }),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: Row(
-                          children: const <Widget>[
-                            Text(
-                              "Categoty",
-                              style: TextStyle(
-                                  // color: Colors.black45,
-                                  color: Style.Colors.titleColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Obx(() {
-                        if (homeController.isLoadingGetCategory.value != true) {
-                          return _buildCategoryWidget(
-                              homeController.getCategoryObj.value);
-                        } else {
-                          if (homeController.isRefreshGetTodayNews.value !=
-                              true) {
-                            return Container(
-                                height: 90,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                        color: Style.Colors.appColor)));
-                          } else {
-                            return Container(
-                              height: 90,
-                            );
-                          }
-                        }
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "News",
-                              style: TextStyle(
-                                  color: Style.Colors.titleColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Obx(() {
-                          if (homeController.isLoadingGetTodayNews.value !=
-                              true) {
-                            return _buildTodayNewsWidget(
-                                homeController.getTodayNewsObj.value);
-                          } else {
-                            if (homeController.isRefreshGetTodayNews.value !=
-                                true) {
-                              return Container(
-                                  height: 200,
-                                  child: Center(
-                                      child: CircularProgressIndicator(
-                                          color: Style.Colors.appColor)));
-                            } else {
-                              return Container(
-                                height: 200,
-                              );
-                            }
-                          }
-                        }),
-                      ),
-                      // HotNewsWidget()
+
                     ],
                   ),
                 ),
@@ -258,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 autoPlay: true,
                 // enlargeCenterPage: false,
                 height: 200.0,
-                viewportFraction: 0.9,
+                viewportFraction: 1.0,
               ),
               items: getExpenseSliders(sliderList, imagePath!)));
     }
@@ -275,6 +313,16 @@ class _HomeScreenState extends State<HomeScreen> {
               //         builder: (context) => DetailNews(
               //           article: sliderList,
               //         )));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewsDetailScreen(
+                        isBool: true,
+                        newsData: sliderObj,
+                        imagePath: imagePathe,
+                        isPageCheck: true,
+                        // article: articles[index],
+                      )));
             },
             child: Container(
               padding: EdgeInsets.only(
@@ -325,15 +373,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Positioned(
-                      bottom: 10.0,
+                      bottom: 8.0,
                       child: Container(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        width: 250.0,
+                        padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                        width: MediaQuery.of(context).size.width,
                         child: Text(
                           sliderObj.newsTitle!,
                           style: TextStyle(
-                              height: 1.5,
                               color: Colors.white,
+
                               fontWeight: FontWeight.bold,
                               fontSize: 12.0),
                         ),
@@ -392,14 +440,15 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else
       return Container(
-        height: 78.0,
+        height: 75.0,
+        margin: EdgeInsets.only(top: 5.0, left: 3.0),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categoryList.length,
           itemBuilder: (context, index) {
             return Container(
               // color: Colors.red,
-              padding: EdgeInsets.only(top: 5.0, right: 0.0),
+
               width: 60.0,
               child: GestureDetector(
                 onTap: () async {
@@ -502,10 +551,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          height: 1.4,
+                          // height: 1.4,
                           color: Style.Colors.titleColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 10.0),
+                          fontSize: 12.0),
                     ),
                     // SizedBox(
                     //   height: 3.0,
@@ -684,15 +733,23 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             // height: articles.length / 2 * 210.0,
-            padding: EdgeInsets.all(0.0),
+            padding: EdgeInsets.only(left: 3.0),
             child: new GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemCount: newsList.length,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.85),
-              itemBuilder: (context, index) {
+                  crossAxisCount: 2,
 
+                  // childAspectRatio: 1.00
+                  // ,
+                mainAxisExtent: 250,
+
+              ),
+              itemBuilder: (context, index) {
+                final dt = DateTime.now().difference(DateTime.parse(newsList[index].newsDate!)).inDays;
+                final String newsDate = DateFormat("dd-MMM-yyyy")
+                    .format(DateTime.parse(newsList[index].newsDate!));
                 print("newsList[index].videoUrl ${newsList[index].videoUrl}");
                 return Padding(
                   padding: const EdgeInsets.only(
@@ -747,47 +804,46 @@ class _HomeScreenState extends State<HomeScreen> {
                            newsList[index].videoUrl == null || newsList[index].videoUrl == ""
                           ?
                           newsList[index].image! == null
-                              ? Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5.0),
-                                            topRight: Radius.circular(5.0)),
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                "assets/img/placeholder.jpg"),
+                              ? Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(5.0),
+                                        topRight: Radius.circular(5.0)),
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/img/placeholder.jpg"),
 
-                                            //AssetImage("assets/img/placeholder.jpg"),
+                                        //AssetImage("assets/img/placeholder.jpg"),
 
-                                            // articles[index].img! == null
-                                            //     ? AssetImage("aseets/img/placeholder.jpg")
-                                            //     : NetworkImage(articles[index].img!),
+                                        // articles[index].img! == null
+                                        //     ? AssetImage("aseets/img/placeholder.jpg")
+                                        //     : NetworkImage(articles[index].img!),
 
-                                            fit: BoxFit.fill)),
-                                  ),
-                                )
-                              : Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5.0),
-                                            topRight: Radius.circular(5.0)),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "${imagePath! + newsList[index].image!}"),
+                                        fit: BoxFit.fill)),
+                                height: 150,
+                              )
+                              : Container(
 
-                                            //AssetImage("assets/img/placeholder.jpg"),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(5.0),
+                                        topRight: Radius.circular(5.0)),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            "${imagePath! + newsList[index].image!}"),
 
-                                            // articles[index].img! == null
-                                            //     ? AssetImage("aseets/img/placeholder.jpg")
-                                            //     : NetworkImage(articles[index].img!),
+                                        //AssetImage("assets/img/placeholder.jpg"),
 
-                                            fit: BoxFit.fill)),
-                                  ),
-                                )
+                                        // articles[index].img! == null
+                                        //     ? AssetImage("aseets/img/placeholder.jpg")
+                                        //     : NetworkImage(articles[index].img!),
+
+                                        fit: BoxFit.fill)),
+                            height: 150,
+                              )
                           :newsList[index].image! == null
                               ?
-                          Expanded(
+                          Container(
                             child: Stack(
 
                                   children: [
@@ -819,8 +875,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   ],
                                 ),
+                            height: 150,
                           )
-                              : Expanded(
+                              : Container(
+                             height: 150,
                                 child: Stack(
                                   children: [
                                     Container(
@@ -855,24 +913,76 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                           Container(
+                            height: 50,
+
                             padding: EdgeInsets.only(
                                 left: 10.0,
                                 right: 10.0,
-                                top: 10.0,
-                                bottom: 10.0),
-                            child: Text(
-                              newsList[index].newsTitle!,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: TextStyle(height: 1.3, fontSize: 15.0),
+                                top: 0.0,
+                                bottom: 0.0),
+                            child: Center(
+                              child: Text(
+                                newsList[index].newsTitle!,
+                                // textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle( fontSize: 15.0),
+                              ),
                             ),
                           ),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Container(
-                                padding:
+                          Container(
+                            child: Column(children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    padding:
                                     EdgeInsets.only(left: 10.0, right: 10.0),
+                                    width: 180,
+                                    height: 1.0,
+                                    color: Colors.black12,
+                                  ),
+                                  Container(
+                                    width: 30,
+                                    height: 3.0,
+                                    color: Style.Colors.mainColor,
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(9.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        newsList[index].categoryName!,
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Style.Colors.mainColor,
+                                            fontSize: 12.0),
+                                      ),
+                                    ),
+                                    dt >= 6
+                                        ?Text(
+                                      newsDate,
+                                      // "timeUntil",
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 12.0),
+                                    )
+                                        :
+                                    Text(
+                                      timeUntil(DateTime.parse(
+                                          newsList[index].newsDate!)),
+                                      // "timeUntil",
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 12.0),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],),
+                            height: 40,
                                 width: 180,
                                 height: 1.0,
                                 color: Colors.black12,
