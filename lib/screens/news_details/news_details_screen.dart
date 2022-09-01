@@ -768,9 +768,12 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                                     style: TextStyle(
                                       color: Colors.grey,fontSize: 12
                                         )),
-                              ):Text(
-                                timeUntil(DateTime.parse(newsDetailList[0].newsDate!)),
-                                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                              ):Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  timeUntil(DateTime.parse(newsDetailList[0].newsDate!)),
+                                  style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                                ),
                               ),
                               // SizedBox(
                               //   height: 10.0,
