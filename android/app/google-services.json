@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "344141696138",
+    "project_id": "vartman-pravah-9ed55",
+    "storage_bucket": "vartman-pravah-9ed55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344141696138:android:32fa427799e79cc4e33173",
+        "android_client_info": {
+          "package_name": "com.proactii.news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344141696138-dtpgc27isttt6tnn8ecdm9uu1ucgonvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASGKJTmDqopUjpe97WaM2Hwhm3R40jWcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344141696138-dtpgc27isttt6tnn8ecdm9uu1ucgonvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
