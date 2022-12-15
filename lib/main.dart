@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,8 +11,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'bindings/main_binding.dart';
 import 'routes/navigation.dart';
 
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
 // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 Future<void> main() async {
+  HttpOverrides.global =  MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
    // FirebaseAnalytics analytics = FirebaseAnalytics();
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
