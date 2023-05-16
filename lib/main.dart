@@ -22,7 +22,6 @@ class MyHttpOverrides extends HttpOverrides{
 // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 Future<void> main() async {
   HttpOverrides.global =  MyHttpOverrides();
-  HttpOverrides.global = MyHttpOverrides();
    // FirebaseAnalytics analytics = FirebaseAnalytics();
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);

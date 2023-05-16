@@ -342,7 +342,7 @@ class _EPaperScreenState extends State<EPaperScreen> {
                 ),
                 child: Column(
                   children: <Widget>[
-                    ePaperDataList[0].paperImg! == null
+                    ePaperDataList[0].paperImg == null
                         ? Container(
                       height: 150,
                       decoration: BoxDecoration(
